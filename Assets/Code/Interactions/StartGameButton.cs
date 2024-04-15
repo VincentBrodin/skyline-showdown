@@ -1,4 +1,5 @@
-﻿using Code.Networking;
+﻿using Code.Managers;
+using Code.Networking;
 using Mirror;
 
 namespace Code.Interactions{
@@ -20,11 +21,16 @@ namespace Code.Interactions{
         }
 
         private void Load(){
-            ChangeScene();
+            Invoke(nameof(ChangeScene), 5);
+            Countdown.Singleton.StartCountdown(5, "STARTING IN:");
+        }
+
+        private void ChangeScene(){
+            ServerChangeScene();
         }
 
         [Command(requiresAuthority = false)]
-        private void ChangeScene(){
+        private void ServerChangeScene(){
             Manager().ServerChangeScene(map.options[map.currentSelected].id);
         }
     }
