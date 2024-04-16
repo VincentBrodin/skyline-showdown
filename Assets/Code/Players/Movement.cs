@@ -6,7 +6,9 @@ using UnityEngine;
 
 namespace Code.Players{
     public class Movement : NetworkBehaviour{
-        [Header("General Settings")] public bool grounded;
+        public bool grounded;
+        public bool isOnSlope;
+        [Header("General Settings")] 
         public LayerMask groundLayers = 0;
         public float minSlopeAngle = 15f;
         public float maxSlopeAngle = 45f;
@@ -39,9 +41,11 @@ namespace Code.Players{
         private bool _cancelingGrounded, _canJump;
         private Vector3 _groundNormal;
         private Rigidbody _rb;
+        private GamePlayer _gamePlayer;
 
         private void Start(){
             _rb = GetComponent<Rigidbody>();
+            _gamePlayer = GetComponent<GamePlayer>();
             _canJump = true;
 
             SettingsMenu.Singleton.LoadingSettings.AddListener(LoadSettings);
@@ -134,12 +138,15 @@ namespace Code.Players{
 
             _rb.AddForce(jumpNormal * jumpForce, ForceMode.VelocityChange);
 
+            _groundNormal = Vector3.up;
+
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
         private void ResetJump(){
             _canJump = true;
         }
+        
 
         private void CounterMovement(){
             //General countermovement
@@ -149,6 +156,8 @@ namespace Code.Players{
             if (!grounded) velocity = AdjustToAirControll(velocity);
 
             velocity *= -1;
+            velocity = Vector3.ProjectOnPlane(velocity, _groundNormal);
+
 
             float currentAirControll = grounded ? 1 : airControll;
             _rb.AddForce(velocity * (counterMovementForce * currentAirControll), ForceMode.Acceleration);
@@ -172,25 +181,32 @@ namespace Code.Players{
             //Gets the desired direction of the player by adding together inputs and look direction
             Vector3 direction = orientation.forward * _yKeyboard + orientation.right * _xKeyboard;
             direction = Vector3.ClampMagnitude(direction, 1);
+            direction = Vector3.ProjectOnPlane(direction, _groundNormal);
 
             return direction;
         }
 
         private void UpdateInputs(){
             if (CursorManager.Singleton.WindowsOpend){
-                _xKeyboard = 0;
-                _xKeyboardRaw = 0;
-                _yKeyboard = 0;
-                _yKeyboardRaw = 0;
+              
                 return;
             }
-
+            
             //Update all inputs
             _xMouse += Input.GetAxis("Mouse X") * xSensitivity * (invertX ? -1 : 1);
             _yMouse += Input.GetAxis("Mouse Y") * ySensitivity * (invertY ? -1 : 1);
 
             _yMouse = Mathf.Clamp(_yMouse, -85, 85);
 
+            if(_gamePlayer.frozen)
+            {
+                _xKeyboard = 0;
+                _xKeyboardRaw = 0;
+                _yKeyboard = 0;
+                _yKeyboardRaw = 0;
+                return;
+            }
+            
             _xKeyboardRaw = 0;
             if (Input.GetKey(right))
                 _xKeyboardRaw += 1;
@@ -230,6 +246,11 @@ namespace Code.Players{
             return angle < maxSlopeAngle;
         }
 
+        private bool IsSlope(Vector3 v){
+            float angle = Vector3.Angle(Vector3.up, v);
+            return angle > minSlopeAngle;
+        }
+
         private void OnCollisionStay(Collision other){
             //Make sure we are only checking for walkable layers
             int layer = other.gameObject.layer;
@@ -240,6 +261,7 @@ namespace Code.Players{
                 Vector3 normal = other.contacts[i].normal;
                 //FLOOR
                 if (!IsFloor(normal)) continue;
+                isOnSlope = IsSlope(normal);
                 grounded = true;
                 _cancelingGrounded = false;
                 _groundNormal = normal;
@@ -255,6 +277,7 @@ namespace Code.Players{
 
         private void StopGrounded(){
             grounded = false;
+            _groundNormal = Vector3.up;
         }
     }
 }

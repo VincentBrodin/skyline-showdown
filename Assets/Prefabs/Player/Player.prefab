@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 9100926895212163084}
   - component: {fileID: 7767465671601477862}
   - component: {fileID: 2164352572200788795}
+  - component: {fileID: 5246398956078106086}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -179,6 +180,8 @@ MonoBehaviour:
   connectionId: 0
   playerId: 0
   playerName: 
+  frozen: 0
+  gameMode: 0
 --- !u!114 &8828643306918456554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,11 +198,12 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   grounded: 0
+  isOnSlope: 0
   groundLayers:
     serializedVersion: 2
     m_Bits: 1
   minSlopeAngle: 15
-  maxSlopeAngle: 45
+  maxSlopeAngle: 30
   walkSpeed: 70
   counterMovementForce: 10
   jumpForce: 10
@@ -418,6 +422,21 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 2
   hasSpawned: 0
+--- !u!114 &5246398956078106086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366613145405582605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af95da0ba5b14044a99b36556a6e5b43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localPosition: {x: 0, y: 0, z: 0}
+  radius: 0.35
+  strength: 1
 --- !u!1 &2117788062927735503
 GameObject:
   m_ObjectHideFlags: 0

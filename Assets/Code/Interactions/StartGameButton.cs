@@ -1,10 +1,14 @@
-﻿using Code.Managers;
+﻿using System;
+using Code.Interface;
+using Code.Managers;
 using Code.Networking;
+using Code.Tools;
 using Mirror;
 
 namespace Code.Interactions{
     public class StartGameButton : NetworkBehaviour{
         public Selections map;
+        public Selections gameMode;
         public Interactive interactive;
 
         private CustomNetworkManager _manager;
@@ -21,8 +25,25 @@ namespace Code.Interactions{
         }
 
         private void Load(){
-            Invoke(nameof(ChangeScene), 5);
-            Countdown.Singleton.StartCountdown(5, "STARTING IN:");
+            Enum.TryParse(gameMode.options[gameMode.currentSelected].id, out GameMode gameModeToSet);
+            UpdateData(gameModeToSet);
+            Invoke(nameof(ChangeScene), 3);
+            Countdown.Singleton.StartCountdown(3, "STARTING IN:");
+        }
+
+        private void UpdateData(GameMode gameModeToSet){
+            ServerUpdateData(gameModeToSet);
+        }
+
+        [Command(requiresAuthority = false)]
+        private void ServerUpdateData(GameMode gameModeToSet){
+            ClientUpdateData(gameModeToSet);
+        }
+
+        [ClientRpc]
+        private void ClientUpdateData(GameMode gameModeToSet){
+            Manager().localPlayer.gameMode = gameModeToSet;
+            ScreenCover.Singleton.Fade(0, 1, 3f);
         }
 
         private void ChangeScene(){

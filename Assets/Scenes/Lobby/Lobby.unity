@@ -1225,6 +1225,50 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 563973050}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &564510872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 564510873}
+  - component: {fileID: 564510874}
+  m_Layer: 0
+  m_Name: LobbyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &564510873
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564510872}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &564510874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564510872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2aaadf00e6c041f880f798325798a223, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &586870593
 GameObject:
   m_ObjectHideFlags: 0
@@ -1795,6 +1839,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   map: {fileID: 433579363}
+  gameMode: {fileID: 711900935}
   interactive: {fileID: 1972596051}
 --- !u!1 &662027177
 GameObject:
@@ -2155,18 +2200,23 @@ MonoBehaviour:
   animationSpeed: 10
   options:
   - optionName: TAG
-    id: 
+    id: Tag
     icon: {fileID: 21300000, guid: de2b672d2b1bfa240bbe468ac00f5f8d, type: 3}
     image: {fileID: 21300000, guid: de2b672d2b1bfa240bbe468ac00f5f8d, type: 3}
     transform: {fileID: 0}
   - optionName: HIDE AND SEEK
-    id: 
+    id: HideAndSeek
     icon: {fileID: 21300000, guid: edf3c3ac17671c34fa8e00a4784b6114, type: 3}
     image: {fileID: 21300000, guid: edf3c3ac17671c34fa8e00a4784b6114, type: 3}
     transform: {fileID: 0}
   - optionName: SNOW BALL FIGHT
-    id: 
+    id: SnowballFight
     icon: {fileID: 21300000, guid: e8a2f9b6982a0c949a703676021873eb, type: 3}
+    image: {fileID: 21300000, guid: e8a2f9b6982a0c949a703676021873eb, type: 3}
+    transform: {fileID: 0}
+  - optionName: KING OF THE HILL
+    id: KingOfTheHill
+    icon: {fileID: 21300000, guid: efa95dcebc278d64eb9a3ceca07d7fa3, type: 3}
     image: {fileID: 21300000, guid: e8a2f9b6982a0c949a703676021873eb, type: 3}
     transform: {fileID: 0}
   selectedName: {fileID: 964160182}
@@ -6985,6 +7035,7 @@ SceneRoots:
   - {fileID: 531089171}
   - {fileID: 711900933}
   - {fileID: 587153685}
+  - {fileID: 564510873}
   - {fileID: 511889087}
   - {fileID: 5830865332900272663}
   - {fileID: 1240225672}
