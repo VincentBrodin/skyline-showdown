@@ -27,9 +27,11 @@ namespace Code.Interactions{
         private void Load(){
             Enum.TryParse(gameMode.options[gameMode.currentSelected].id, out GameMode gameModeToSet);
             UpdateData(gameModeToSet);
-            Invoke(nameof(ChangeScene), 3);
+            Invoke(nameof(FadeIn), 3);
+            Invoke(nameof(ChangeScene), 4f);
             Countdown.Singleton.StartCountdown(3, "STARTING IN:");
         }
+
 
         private void UpdateData(GameMode gameModeToSet){
             ServerUpdateData(gameModeToSet);
@@ -43,7 +45,20 @@ namespace Code.Interactions{
         [ClientRpc]
         private void ClientUpdateData(GameMode gameModeToSet){
             Manager().localPlayer.gameMode = gameModeToSet;
-            ScreenCover.Singleton.Fade(0, 1, 3f);
+        }
+        
+        private void FadeIn(){
+            ServerFadeIn();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void ServerFadeIn(){
+            ClientFadeIn();
+        }
+
+        [ClientRpc]
+        private void ClientFadeIn(){
+            ScreenCover.Singleton.FadeIn();
         }
 
         private void ChangeScene(){

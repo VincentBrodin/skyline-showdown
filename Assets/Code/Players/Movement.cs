@@ -118,11 +118,23 @@ namespace Code.Players{
             UpdateInputs();
             UpdateRotations();
             Jump();
+            
+            if (!_canJump){
+                _rb.useGravity  = true;
+            }
+            else
+                _rb.useGravity = !isOnSlope;
         }
 
         private void Move(){
             //Extra gravity
-            _rb.AddForce(Vector3.down * 15, ForceMode.Acceleration);
+            if(!isOnSlope)
+                _rb.AddForce(Vector3.down * 15, ForceMode.Acceleration);
+            
+            //If on slope and moving down add force
+            if (isOnSlope && _rb.velocity.y > 0){
+                _rb.AddForce(Vector3.down * 15, ForceMode.Acceleration);
+            }
 
             float currentAirControll = grounded ? 1 : airControll;
             Vector3 walkForce = GetDesiredDirection() * (walkSpeed * currentAirControll);
@@ -132,6 +144,7 @@ namespace Code.Players{
         }
 
         private void Jump(){
+            //Makes it so the player can only jump on the ground
             if (!_canJump || !grounded || !Input.GetKeyDown(jump) || CursorManager.Singleton.WindowsOpend) return;
 
             Vector3 jumpNormal = Vector3.Lerp(Vector3.up, _groundNormal, mimicGroundAngle);
@@ -149,7 +162,7 @@ namespace Code.Players{
         
 
         private void CounterMovement(){
-            //General countermovement
+            //General countermovement.
             Vector3 velocity = _rb.velocity;
             velocity.y = 0;
 
@@ -162,13 +175,14 @@ namespace Code.Players{
             float currentAirControll = grounded ? 1 : airControll;
             _rb.AddForce(velocity * (counterMovementForce * currentAirControll), ForceMode.Acceleration);
 
-            //Harder stops if velocity is low
+            //Harder stops if velocity is low to stop sliping.
             if (velocity.magnitude < 1f && grounded){
                 _rb.AddForce(velocity * (counterMovementForce * 2), ForceMode.Acceleration);
             }
         }
 
         private Vector3 AdjustToAirControll(Vector3 velocity){
+            //Stops player from getting friction in the air if no input is given.
             Vector3 adjustedVelocity = orientation.InverseTransformDirection(velocity);
             if (_xKeyboardRaw == 0) adjustedVelocity.x = 0;
             if (_yKeyboardRaw == 0) adjustedVelocity.z = 0;
@@ -277,6 +291,7 @@ namespace Code.Players{
 
         private void StopGrounded(){
             grounded = false;
+            isOnSlope = false;
             _groundNormal = Vector3.up;
         }
     }

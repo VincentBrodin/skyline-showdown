@@ -18,7 +18,7 @@ namespace Code.Managers{
         }
 
         private void Start(){
-            ScreenCover.Singleton.Fade(1, 0, 3f);
+            ScreenCover.Singleton.FadeOut();
             CursorManager.Singleton.ResetHide();
         }
 
