@@ -809,115 +809,96 @@ MonoBehaviour:
   visibleTerrainsOnly: 0
   treeTypes:
   - enabled: 1
-    name: Tree_02
-    seed: 30644
-    probability: 15
-    collisionCheck: 1
+    name: Tree 1
+    seed: 7786
+    probability: 10
+    collisionCheck: 0
     rejectUnderwater: 0
-    heightRange: {x: 4, y: 1000}
-    slopeRange: {x: 0, y: 20}
+    heightRange: {x: 4.5, y: 1000}
+    slopeRange: {x: 0, y: 35}
     curvatureRange: {x: 0, y: 1}
     layerMasks: []
-    instanceCount: 85
+    instanceCount: 30
     prefabs:
     - index: 0
       probability: 100
-      prefab: {fileID: 4661435515762455780, guid: e289bf5debb17f6459818c207d781953,
+      prefab: {fileID: 4470068468865549885, guid: 06573cc19fb2e4a479092a9b4687b26c,
         type: 3}
-    distance: 2.5
+    distance: 5
     scaleRange: {x: 0.8, y: 1.2}
-    sinkAmount: 0.25
+    sinkAmount: 0
   - enabled: 1
-    name: Tree_03
-    seed: 9649
-    probability: 15
-    collisionCheck: 1
+    name: Tree 2
+    seed: 8603
+    probability: 10
+    collisionCheck: 0
     rejectUnderwater: 0
-    heightRange: {x: 4, y: 1000}
-    slopeRange: {x: 0, y: 20}
+    heightRange: {x: 4.5, y: 1000}
+    slopeRange: {x: 0, y: 35}
     curvatureRange: {x: 0, y: 1}
     layerMasks: []
-    instanceCount: 83
+    instanceCount: 28
     prefabs:
     - index: 1
       probability: 100
-      prefab: {fileID: 6941765000743290380, guid: c60edd51c065ceb46b345849a03bc106,
+      prefab: {fileID: 3655122399371990756, guid: b0b4c1c1dea91474e80b958446c76e5b,
         type: 3}
-    distance: 2.5
+    distance: 5
     scaleRange: {x: 0.8, y: 1.2}
-    sinkAmount: 0.25
+    sinkAmount: 0
   - enabled: 1
-    name: Tree_05
-    seed: 7029
-    probability: 15
-    collisionCheck: 1
+    name: Tree 3
+    seed: 3806
+    probability: 10
+    collisionCheck: 0
     rejectUnderwater: 0
-    heightRange: {x: 4, y: 1000}
-    slopeRange: {x: 0, y: 20}
+    heightRange: {x: 4.5, y: 1000}
+    slopeRange: {x: 0, y: 35}
     curvatureRange: {x: 0, y: 1}
     layerMasks: []
-    instanceCount: 89
+    instanceCount: 19
     prefabs:
     - index: 2
       probability: 100
-      prefab: {fileID: 9069115365609291303, guid: 60f79905accf3b24fa0114b941f1aac0,
+      prefab: {fileID: 1759554402409908225, guid: ab1a291faed69db41860cdd7b273c28d,
         type: 3}
-    distance: 2.5
+    distance: 5
     scaleRange: {x: 0.8, y: 1.2}
-    sinkAmount: 0.25
+    sinkAmount: 0
   - enabled: 1
-    name: Rock_05
-    seed: 473
+    name: Tree 4
+    seed: 5493
     probability: 10
     collisionCheck: 0
     rejectUnderwater: 0
-    heightRange: {x: 4, y: 1000}
-    slopeRange: {x: 0, y: 20}
+    heightRange: {x: 4.5, y: 1000}
+    slopeRange: {x: 0, y: 35}
     curvatureRange: {x: 0, y: 1}
     layerMasks: []
-    instanceCount: 15
+    instanceCount: 16
     prefabs:
     - index: 3
       probability: 100
-      prefab: {fileID: 1576488453971893466, guid: a778b631c6253a04899cb31bad047c81,
+      prefab: {fileID: 5603335818341881996, guid: 2e0bdbada749e6f48b12cd3f5cadc4f3,
         type: 3}
     distance: 5
     scaleRange: {x: 0.8, y: 1.2}
     sinkAmount: 0
   - enabled: 1
-    name: Bush_01
-    seed: 1837
+    name: Tree 5
+    seed: 3357
     probability: 10
-    collisionCheck: 0
+    collisionCheck: 1
     rejectUnderwater: 0
-    heightRange: {x: 4, y: 1000}
-    slopeRange: {x: 0, y: 20}
+    heightRange: {x: 4.5, y: 9.998169}
+    slopeRange: {x: 0, y: 35}
     curvatureRange: {x: 0, y: 1}
     layerMasks: []
-    instanceCount: 13
+    instanceCount: 14
     prefabs:
     - index: 4
       probability: 100
-      prefab: {fileID: 4263922822445002727, guid: 3cdafb3c2f54d434894928d72d282874,
-        type: 3}
-    distance: 5
-    scaleRange: {x: 0.8, y: 1.2}
-    sinkAmount: 0
-  - enabled: 1
-    name: Bush_02
-    seed: 4498
-    probability: 10
-    collisionCheck: 0
-    rejectUnderwater: 0
-    heightRange: {x: 4, y: 1000}
-    slopeRange: {x: 0, y: 20}
-    curvatureRange: {x: 0, y: 1}
-    layerMasks: []
-    instanceCount: 7
-    prefabs:
-    - index: 5
-      probability: 100
-      prefab: {fileID: 6239969156481229051, guid: b71b0f8d2f881c743a85228f3030d1cb,
+      prefab: {fileID: 7548925946568531736, guid: 5bec60f4b2bc22b4fa1dcca2ca18225f,
         type: 3}
     distance: 5
     scaleRange: {x: 0.8, y: 1.2}
@@ -1294,6 +1275,28 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  gameSettings:
+  - gameMode: 1
+    countdownPrompt: TAG!!!
+    gameTime: 90
+    respawn: 1
+    lives: -1
+  - gameMode: 2
+    countdownPrompt: 
+    gameTime: 90
+    respawn: 1
+    lives: -1
+  - gameMode: 3
+    countdownPrompt: 
+    gameTime: 90
+    respawn: 1
+    lives: 5
+  - gameMode: 4
+    countdownPrompt: 
+    gameTime: 90
+    respawn: 1
+    lives: -1
+  gameMode: 0
 --- !u!4 &1731914037
 Transform:
   m_ObjectHideFlags: 0

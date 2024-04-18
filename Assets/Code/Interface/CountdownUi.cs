@@ -32,6 +32,8 @@ namespace Code.Interface{
             if (_displaying){
                 clock.text = TimeToString(Countdown.Singleton.time);
             }
+
+            prompt.text = $"{Countdown.Singleton.prompt}";
         }
 
         private string TimeToString(float time){

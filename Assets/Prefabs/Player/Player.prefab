@@ -132,6 +132,9 @@ GameObject:
   - component: {fileID: 8828643306918456554}
   - component: {fileID: 3020271019969121189}
   - component: {fileID: 5143006382703187586}
+  - component: {fileID: 980262410584480931}
+  - component: {fileID: 5938156970038914542}
+  - component: {fileID: 7827194869438733415}
   - component: {fileID: 1668045622601823027}
   - component: {fileID: 9100926895212163084}
   - component: {fileID: 7767465671601477862}
@@ -262,6 +265,59 @@ MonoBehaviour:
   worldCamera: {fileID: 8164954355120998171}
   cameraHolder: {fileID: 529895886388309300}
   cameraPosition: {fileID: 4334916131803247831}
+--- !u!114 &980262410584480931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366613145405582605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4dd4372e1cea44d2973c766b99a2f6a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  range: 2
+  cooldown: 0.5
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 65
+  worldCamera: {fileID: 1163914818363209713}
+--- !u!114 &5938156970038914542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366613145405582605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ca1b0b895f040858090d79bf7fbf54e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  tagged: 0
+--- !u!114 &7827194869438733415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1366613145405582605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94823c74126547c28a45c0e8c4591ed2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  knockBackForce: 10
 --- !u!114 &1668045622601823027
 MonoBehaviour:
   m_ObjectHideFlags: 0

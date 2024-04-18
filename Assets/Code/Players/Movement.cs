@@ -170,10 +170,15 @@ namespace Code.Players{
 
             velocity *= -1;
             velocity = Vector3.ProjectOnPlane(velocity, _groundNormal);
-
+            
 
             float currentAirControll = grounded ? 1 : airControll;
-            _rb.AddForce(velocity * (counterMovementForce * currentAirControll), ForceMode.Acceleration);
+
+            Vector3 force = velocity * (counterMovementForce * currentAirControll);
+
+            force = Vector3.ClampMagnitude(force, walkSpeed * currentAirControll);
+         
+            _rb.AddForce(force, ForceMode.Acceleration);
 
             //Harder stops if velocity is low to stop sliping.
             if (velocity.magnitude < 1f && grounded){
