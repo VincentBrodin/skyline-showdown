@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Code.Interface.Settings;
 using Code.Networking;
 using Code.Players;
@@ -19,9 +20,10 @@ namespace Code.Interface{
 
         private float _nextNameUpdate;
 
-        private readonly Dictionary<GamePlayer, TextMeshProUGUI> _texts = new();
-        
+        private Dictionary<GamePlayer, TextMeshProUGUI> _texts = new();
+
         private CustomNetworkManager _manager;
+
         private CustomNetworkManager Manager(){
             if (_manager == null)
                 _manager = NetworkManager.singleton as CustomNetworkManager;
@@ -48,31 +50,30 @@ namespace Code.Interface{
         }
 
         public void AddPlayer(GamePlayer gamePlayer){
-            if(_texts.ContainsKey(gamePlayer)) return;
+            if (_texts.ContainsKey(gamePlayer)) return;
             TextMeshProUGUI text = Instantiate(playerText, parent);
             text.text = gamePlayer.playerName;
             _texts.Add(gamePlayer, text);
         }
 
         public void RemovePlayer(GamePlayer gamePlayer){
-            if(!_texts.TryGetValue(gamePlayer, out TextMeshProUGUI text)) return;
+            if (!_texts.TryGetValue(gamePlayer, out TextMeshProUGUI text)) return;
             Destroy(text.gameObject);
             _texts.Remove(gamePlayer);
         }
 
         private void FixedUpdate(){
-            if(_nextNameUpdate > Time.time) return;
+            if (_nextNameUpdate > Time.time) return;
             _nextNameUpdate = Time.time + 1;
-
             foreach (KeyValuePair<GamePlayer, TextMeshProUGUI> textPair in _texts){
-                textPair.Value.text = textPair.Key.playerName;
+                textPair.Value.text = $"{textPair.Key.playerName} - SCORE: {textPair.Key.score}";
             }
         }
 
         private void Update(){
             if (!Input.GetKeyDown(toggleKey)) return;
             showing = !showing;
-                
+
             show.SetActive(showing);
             UpdatePrompt();
         }

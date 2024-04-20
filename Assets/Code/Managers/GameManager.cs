@@ -82,9 +82,14 @@ namespace Code.Managers{
 
         private void PrepairSceneSwitch(){
             if(!isServer) return;
-            ScreenCover.Singleton.FadeIn();
+            ClientScreenCover();
             UnTagPlayers();
             Invoke(nameof(SwitchScene), 1.5f);
+        }
+
+        [ClientRpc]
+        private void ClientScreenCover(){
+            ScreenCover.Singleton.FadeIn();
         }
 
   
@@ -95,6 +100,9 @@ namespace Code.Managers{
                 case GameMode.Tag:
                     SetUpTag();
                     break;
+                case GameMode.HideAndSeek:
+                    SetUpHideAndSeek();
+                    break;
             }
         }
         
@@ -103,6 +111,9 @@ namespace Code.Managers{
             if(!isServer) return;
             switch (gameMode){
                 case GameMode.Tag:
+                    GiveTagSurvivalScore();
+                    break;
+                case GameMode.HideAndSeek:
                     GiveTagSurvivalScore();
                     break;
             }
@@ -122,6 +133,24 @@ namespace Code.Managers{
             UnTagPlayers();
             int amountOfPlayers = Manager().Players.Count;
             int numberOfTaggers = amountOfPlayers/2;
+            List<GamePlayer> gamePlayers = new();
+            Manager().Players.CopyTo(gamePlayers);
+
+            for (int i = 0; i < numberOfTaggers; i++){
+                int index = Random.Range(0, gamePlayers.Count);
+                gamePlayers[index].GetComponent<Tag>().SetTagged(true);
+                gamePlayers.RemoveAt(index);
+            }
+        }
+
+        private void SetUpHideAndSeek(){
+            if(!isServer) return;
+            _counter = 5 + Time.time;
+            UnTagPlayers();
+            
+            int amountOfPlayers = Manager().Players.Count;
+            int numberOfTaggers = amountOfPlayers/2;
+            numberOfTaggers = Mathf.Clamp(numberOfTaggers, 0, 2);
             List<GamePlayer> gamePlayers = new();
             Manager().Players.CopyTo(gamePlayers);
 

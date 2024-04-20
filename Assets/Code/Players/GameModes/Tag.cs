@@ -28,7 +28,7 @@ namespace Code.Players.GameModes{
 
 
         private void OnHit(Punch.HitData hitData){
-            if (_gamePlayer.gameMode != GameMode.Tag) return;
+            if (_gamePlayer.gameMode != GameMode.Tag && _gamePlayer.gameMode != GameMode.HideAndSeek) return;
             if (!tagged) return;
             TagPlayer(hitData.VictimId);
         }
@@ -40,9 +40,12 @@ namespace Code.Players.GameModes{
                 break;
             }
 
+            _gamePlayer.GiveScore(10, "TAGGED PLAYER:");
+            if (_gamePlayer.gameMode == GameMode.Tag){
+                tagged = false;
+                TaggedUi.Singleton.Hide();
+            }
             
-            tagged = false;
-            TaggedUi.Singleton.Hide();
             ServerTagPlayer(player);
         }
 
@@ -60,6 +63,7 @@ namespace Code.Players.GameModes{
             if (!isLocalPlayer) return;
             TaggedUi.Singleton.Show();
             tagged = true;
+            _gamePlayer.GiveScore(-10, "GOT TAGGED:");
         }
 
         public void SetTagged(bool newValue){
@@ -75,8 +79,8 @@ namespace Code.Players.GameModes{
         private void ClientSetTagged(bool newValue){
             if (!isLocalPlayer) return;
             tagged = newValue;
-            
-            if(newValue)
+
+            if (newValue)
                 TaggedUi.Singleton.Show();
             else
                 TaggedUi.Singleton.Hide();

@@ -135,7 +135,11 @@ namespace Code.Players{
         [ClientRpc]
         private void ClientGiveScore(int scoreToGive, string prompt){
             if (!isLocalPlayer) return;
-            score += scoreToGive;
+            if (score + scoreToGive < 0){
+                score = 0;
+            }
+            else
+                score += scoreToGive;
             ScoreUi.Singleton.UpdateScore(scoreToGive, prompt);
         }
     }
