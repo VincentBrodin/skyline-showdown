@@ -176,7 +176,8 @@ namespace Code.Players{
 
             Vector3 force = velocity * (counterMovementForce * currentAirControll);
 
-            force = Vector3.ClampMagnitude(force, walkSpeed * currentAirControll);
+            if(!grounded)
+                force = Vector3.ClampMagnitude(force, walkSpeed * currentAirControll);
          
             _rb.AddForce(force, ForceMode.Acceleration);
 

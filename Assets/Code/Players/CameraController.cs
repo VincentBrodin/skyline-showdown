@@ -1,5 +1,4 @@
-﻿using System;
-using Code.Interface.Settings;
+﻿using Code.Interface.Settings;
 using Mirror;
 using UnityEngine;
 
@@ -34,7 +33,7 @@ namespace Code.Players{
                 worldCamera.fieldOfView = (int)PlayerPrefs.GetFloat("fov");
             }
             else{
-                Application.targetFrameRate = 120;
+                worldCamera.fieldOfView = 70;
                 PlayerPrefs.SetFloat("fov", worldCamera.fieldOfView);
             }
         }

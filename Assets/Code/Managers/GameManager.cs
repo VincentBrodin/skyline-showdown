@@ -14,7 +14,8 @@ namespace Code.Managers{
     public class GameManager : NetworkBehaviour{
         public List<GameSetting> gameSettings = new();
         [SyncVar]public GameMode gameMode;
-        private bool _ready;
+        private bool _ready, _gameStarted;
+        private float _counter;
         private CustomNetworkManager _manager;
 
         private CustomNetworkManager Manager(){
@@ -35,6 +36,8 @@ namespace Code.Managers{
             public int lives = -1;
         }
 
+        
+
         private void Start(){
             ScreenCover.Singleton.FadeOut();
             CursorManager.Singleton.ResetHide();
@@ -42,13 +45,15 @@ namespace Code.Managers{
 
         private void FixedUpdate(){
             if(!isServer) return;
+            if (_gameStarted)
+                UpdateGameModes();
+            
             if (_ready || NetworkServer.isLoadingScene || NetworkClient.isLoadingScene) return;
             _ready = true;
             Countdown.Singleton.StartCountdown(3, "STARTING IN:");
             FreezePlayers();
             Invoke(nameof(UnFreezePlayers), 3);
             Invoke(nameof(StartGame), 3);
-
         }
 
         private void FreezePlayers(){
@@ -66,6 +71,7 @@ namespace Code.Managers{
         
         private void StartGame(){
             if(!isServer) return;
+            _gameStarted = true;
             gameMode = Manager().localPlayer.gameMode;
             GameSetting currentGameSetting = gameSettings.FirstOrDefault(gameSetting => gameSetting.gameMode == gameMode);
             Countdown.Singleton.StartCountdown(currentGameSetting.gameTime, currentGameSetting.countdownPrompt);
@@ -92,6 +98,17 @@ namespace Code.Managers{
             }
         }
         
+        
+        private void UpdateGameModes(){
+            if(!isServer) return;
+            switch (gameMode){
+                case GameMode.Tag:
+                    GiveTagSurvivalScore();
+                    break;
+            }
+        }
+
+        
         private void UnTagPlayers(){
             foreach (GamePlayer gamePlayer in  Manager().Players){
                 gamePlayer.GetComponent<Tag>().SetTagged(false);
@@ -101,6 +118,7 @@ namespace Code.Managers{
 
         private void SetUpTag(){
             if(!isServer) return;
+            _counter = 5 + Time.time;
             UnTagPlayers();
             int amountOfPlayers = Manager().Players.Count;
             int numberOfTaggers = amountOfPlayers/2;
@@ -111,6 +129,16 @@ namespace Code.Managers{
                 int index = Random.Range(0, gamePlayers.Count);
                 gamePlayers[index].GetComponent<Tag>().SetTagged(true);
                 gamePlayers.RemoveAt(index);
+            }
+        }
+
+        private void GiveTagSurvivalScore(){
+            if(_counter > Time.time) return;
+            _counter = 5 + Time.time;
+            foreach (GamePlayer gamePlayer in  Manager().Players){
+                if (!gamePlayer.GetComponent<Tag>().tagged){
+                    gamePlayer.GiveScore(5, "SURVIVAL BONUS:");
+                }
             }
         }
 

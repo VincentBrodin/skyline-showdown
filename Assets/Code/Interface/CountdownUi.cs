@@ -17,6 +17,7 @@ namespace Code.Interface{
         }
 
         private void FixedUpdate(){
+            if(!Countdown.Singleton) return;
             if (Countdown.Singleton.ActiveCountdown && !_displaying){
                 hideObject.SetActive(true);
                 _displaying = true;

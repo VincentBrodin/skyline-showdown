@@ -11,11 +11,15 @@ namespace Code.Players{
         [SyncVar] public int playerId;
         [SyncVar] public string playerName;
         [SyncVar] public bool frozen;
-        [SyncVar(hook = nameof(GameModeChanged))] public GameMode gameMode = GameMode.None;
-
+        [SyncVar] public int score;
+        [SyncVar(hook = nameof(GameModeChanged))]
+        public GameMode gameMode = GameMode.None;
+        [Space]
+        [SerializeField] private int personalLayer;
         private Rigidbody _rb;
-        
+
         private CustomNetworkManager _manager;
+
         private CustomNetworkManager Manager(){
             if (_manager == null)
                 _manager = NetworkManager.singleton as CustomNetworkManager;
@@ -25,29 +29,35 @@ namespace Code.Players{
 
         private void Start(){
             _rb = GetComponent<Rigidbody>();
-            
+
             if (isLocalPlayer){
                 //Update player values
                 playerName = $"Nerd {playerId}";
                 Manager().localPlayer = this;
-                    
+
                 //Set random spawn point
                 _rb.position = new Vector3(Random.Range(-1.25f, 1.25f), 0, Random.Range(-1.25f, 1.25f));
-                
+
                 //Reset cursor
                 CursorManager.Singleton.ResetHide();
+                
+                gameObject.SetLayer(personalLayer, true);
             }
-            
+
             Manager().AddPlayer(this);
-            
+
             DontDestroyOnLoad(gameObject);
         }
-        
+
         private void OnDestroy(){
+            if(GetComponent<CameraController>() && GetComponent<CameraController>().cameraHolder)
+                Destroy(GetComponent<CameraController>().cameraHolder.gameObject);
             (NetworkManager.singleton as CustomNetworkManager)?.RemovePlayer(this);
         }
 
         public override void OnStopClient(){
+            if(GetComponent<CameraController>() && GetComponent<CameraController>().cameraHolder)
+                Destroy(GetComponent<CameraController>().cameraHolder.gameObject);
             Manager().RemovePlayer(this);
             base.OnStopClient();
         }
@@ -69,7 +79,7 @@ namespace Code.Players{
         [ClientRpc]
         private void ClientTeleport(Vector3 teleportTo){
             Debug.Log($"Teleporting {playerName} from {_rb.position} to {teleportTo}");
-            if(!isLocalPlayer) return;
+            if (!isLocalPlayer) return;
             _rb.velocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
             _rb.position = teleportTo;
@@ -88,11 +98,10 @@ namespace Code.Players{
 
         [ClientRpc]
         private void ClientFreeze(){
-            if (isLocalPlayer){
-                frozen = true;
-            }
+            if (!isLocalPlayer) return;
+            frozen = true;
         }
-        
+
         public void UnFreeze(){
             ServerUnFreeze();
         }
@@ -102,17 +111,32 @@ namespace Code.Players{
             frozen = false;
             ClientUnFreeze();
         }
-        
+
         [ClientRpc]
         private void ClientUnFreeze(){
-            if (isLocalPlayer){
-                frozen = false;
-            }
+            if (!isLocalPlayer) return;
+            frozen = false;
         }
 
         private void GameModeChanged(GameMode oldValue, GameMode newValue){
-            if(!isLocalPlayer) return;
+            if (!isLocalPlayer) return;
             GameModeUi.Singleton.GameModeChanged(newValue);
+        }
+
+        public void GiveScore(int scoreToGive, string prompt){
+            ServerGiveScore(scoreToGive, prompt);
+        }
+
+        [Command(requiresAuthority = false)]
+        private void ServerGiveScore(int scoreToGive, string prompt){
+            ClientGiveScore(scoreToGive, prompt);
+        }
+
+        [ClientRpc]
+        private void ClientGiveScore(int scoreToGive, string prompt){
+            if (!isLocalPlayer) return;
+            score += scoreToGive;
+            ScoreUi.Singleton.UpdateScore(scoreToGive, prompt);
         }
     }
 }

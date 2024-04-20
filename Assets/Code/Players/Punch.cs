@@ -37,8 +37,11 @@ namespace Code.Players{
             Invoke(nameof(ResetPunch), cooldown);
 
             if (!Physics.Raycast(worldCamera.position, worldCamera.forward, out _hit, range, layerMask)){
+                Debug.Log("Punch Miss");
                 return;
             }
+            
+            Debug.Log("Punch Hit");
 
             if (_hit.collider.transform.parent == null ||
                 !_hit.collider.transform.parent.TryGetComponent(out GamePlayer gamePlayer)){

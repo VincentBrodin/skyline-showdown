@@ -10,6 +10,7 @@ namespace Code.Interface.Settings{
         public GameObject settingsMenu;
         public GameObject blocker;
         public Button closeButton;
+        public Button clearSettings;
         public AudioMixer audioMixer;
         private bool _watingForInput;
 
@@ -27,11 +28,13 @@ namespace Code.Interface.Settings{
             }
 
             DontDestroyOnLoad(gameObject);
+            LoadSettings();
         }
+        
 
         private void Start(){
             closeButton.onClick.AddListener(Hide);
-            LoadSettings();
+            clearSettings.onClick.AddListener(ClearSettings);
             Hide();
             blocker.SetActive(false);
         }
@@ -46,6 +49,11 @@ namespace Code.Interface.Settings{
             isOpen = false;
             settingsMenu.SetActive(false);
             CursorManager.Singleton.CloseWindow();
+        }
+
+        private void ClearSettings(){
+            PlayerPrefs.DeleteAll();
+            LoadSettings();
         }
 
         public void LoadSettings(){
@@ -147,6 +155,10 @@ namespace Code.Interface.Settings{
             
             if (!PlayerPrefs.HasKey("interactive")){
                 PlayerPrefs.SetInt("interactive", (int)KeyCode.E);
+            }
+            
+            if (!PlayerPrefs.HasKey("render_grass")){
+                PlayerPrefs.SetInt("render_grass", 1);
             }
         }
 
