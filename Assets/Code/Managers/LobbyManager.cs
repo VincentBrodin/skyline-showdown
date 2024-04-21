@@ -19,6 +19,7 @@ namespace Code.Managers{
 
         private void Start(){
             ScreenCover.Singleton.FadeOut();
+            CursorManager.Singleton.ResetHide();
         }
 
         private void FixedUpdate(){
