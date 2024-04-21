@@ -160,6 +160,10 @@ namespace Code.Interface.Settings{
             if (!PlayerPrefs.HasKey("render_grass")){
                 PlayerPrefs.SetInt("render_grass", 1);
             }
+            
+            if (!PlayerPrefs.HasKey("head_bob")){
+                PlayerPrefs.SetFloat("head_bob", 1);
+            }
         }
 
         private void LateUpdate(){
