@@ -6,4 +6,14 @@
         SnowballFight,
         KingOfTheHill,
     }
+    
+    public enum Normal
+    {
+        Up,
+        Down,
+        Left,
+        Right,
+        Forward,
+        Back
+    }
 }
