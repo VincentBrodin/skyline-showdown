@@ -576,7 +576,7 @@ MonoBehaviour:
   maxSlopeAngle: 30
   walkSpeed: 70
   counterMovementForce: 10
-  jumpForce: 10
+  jumpForce: 7.5
   jumpCooldown: 0.2
   mimicGroundAngle: 0.25
   airControll: 0.25
