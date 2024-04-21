@@ -756,7 +756,7 @@ MonoBehaviour:
   useDensity: 0
   densityCutoff: 0
   useLength: 1
-  lengthMapping: {x: 0, y: 1}
+  lengthMapping: {x: 0, y: 0.8827553}
   projectType: 0
   projectMask:
     serializedVersion: 2
@@ -819,7 +819,7 @@ MonoBehaviour:
     slopeRange: {x: 0, y: 35}
     curvatureRange: {x: 0, y: 1}
     layerMasks: []
-    instanceCount: 30
+    instanceCount: 29
     prefabs:
     - index: 0
       probability: 100
@@ -857,7 +857,7 @@ MonoBehaviour:
     slopeRange: {x: 0, y: 35}
     curvatureRange: {x: 0, y: 1}
     layerMasks: []
-    instanceCount: 19
+    instanceCount: 17
     prefabs:
     - index: 2
       probability: 100
@@ -876,7 +876,7 @@ MonoBehaviour:
     slopeRange: {x: 0, y: 35}
     curvatureRange: {x: 0, y: 1}
     layerMasks: []
-    instanceCount: 16
+    instanceCount: 18
     prefabs:
     - index: 3
       probability: 100
@@ -895,7 +895,7 @@ MonoBehaviour:
     slopeRange: {x: 0, y: 35}
     curvatureRange: {x: 0, y: 1}
     layerMasks: []
-    instanceCount: 14
+    instanceCount: 15
     prefabs:
     - index: 4
       probability: 100
