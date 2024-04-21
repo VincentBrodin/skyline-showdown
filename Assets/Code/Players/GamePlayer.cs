@@ -4,6 +4,7 @@ using Code.Networking;
 using Code.Tools;
 using Mirror;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Code.Players{
     public class GamePlayer : NetworkBehaviour{
@@ -16,6 +17,8 @@ namespace Code.Players{
         public GameMode gameMode = GameMode.None;
         [Space]
         [SerializeField] private int personalLayer;
+
+        [SerializeField] private SkinnedMeshRenderer[] meshRenderers;
         private Rigidbody _rb;
 
         private CustomNetworkManager _manager;
@@ -42,6 +45,10 @@ namespace Code.Players{
                 CursorManager.Singleton.ResetHide();
                 
                 gameObject.SetLayer(personalLayer, true);
+
+                foreach (SkinnedMeshRenderer meshRenderer in meshRenderers){
+                    meshRenderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+                }
             }
 
             Manager().AddPlayer(this);

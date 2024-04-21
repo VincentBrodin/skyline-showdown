@@ -35,8 +35,11 @@ namespace Code.Players{
         [Space] public bool invertY = true;
         public float ySensitivity = 1;
 
-        [Header("References")] public Transform orientation;
+        [Header("References")] 
+        public Transform orientation;
         public Transform cameraHolder;
+        public Transform rotation;
+        public Animator animator;
 
         private float _xMouse, _yMouse;
         private float _xKeyboard, _xKeyboardRaw, _yKeyboard, _yKeyboardRaw;
@@ -44,12 +47,10 @@ namespace Code.Players{
         private Vector3 _groundNormal;
         private Rigidbody _rb;
         private GamePlayer _gamePlayer;
-        private Animator _animator;
 
         private void Start(){
             _rb = GetComponent<Rigidbody>();
             _gamePlayer = GetComponent<GamePlayer>();
-            _animator = GetComponent<Animator>();
             _canJump = true;
 
             SettingsMenu.Singleton.LoadingSettings.AddListener(LoadSettings);
@@ -134,8 +135,11 @@ namespace Code.Players{
         private void CalculateAnimation(){
             Vector3 velocity = orientation.InverseTransformDirection(_rb.velocity/BaseMoveSpeed);
             velocity.y = 0;
-            _animator.SetFloat("X", velocity.x);
-            _animator.SetFloat("Y", velocity.z);
+            animator.SetFloat("X", velocity.x);
+            animator.SetFloat("Y", velocity.z);
+            
+            rotation.rotation = Quaternion.Euler(_yMouse, _xMouse, 0);
+            rotation.position = orientation.position + new Vector3(0, 1, 0) + rotation.forward * 5;
         }
 
         private void Move(){
