@@ -164,6 +164,10 @@ namespace Code.Interface.Settings{
             if (!PlayerPrefs.HasKey("head_bob")){
                 PlayerPrefs.SetFloat("head_bob", 1);
             }
+            
+            if (!PlayerPrefs.HasKey("head_pitch")){
+                PlayerPrefs.SetFloat("head_pitch", 1);
+            }
         }
 
         private void LateUpdate(){

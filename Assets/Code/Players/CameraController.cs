@@ -8,16 +8,25 @@ namespace Code.Players{
         [Space] public Transform headBob;
         public float headBobSpeed = 14f;
         public float headBobAmount = 0.05f;
-        [Space, Range(0,1)]
-        public float verticalStrength = 1;
-        [Range(0,1)]
-        public float horizontalStrength = 1;
+        [Space, Range(0, 1)] public float verticalStrength = 1;
+        [Range(0, 1)] public float horizontalStrength = 1;
+
+        [Header("Pitch")] 
+        [Range(0, 1)] 
+        public float pitchStrength;
+        [Space] 
+        public Transform pitch;
+        public float inSpeed;
+        public float outSpeed;
+
         [Header("References")] public Camera worldCamera;
         public Transform cameraHolder;
         public Transform cameraPosition;
+
         private Movement _movement;
         private Rigidbody _rb;
         private float _headBobTimer;
+        private float _currentPitch, _goalPitch;
 
         private void Start(){
             _movement = GetComponent<Movement>();
@@ -45,7 +54,7 @@ namespace Code.Players{
                 float xPercent = (Mathf.Abs(velocity.x) / _movement.BaseMoveSpeed) * horizontalStrength;
                 float yPercent = (Mathf.Abs(velocity.z) / _movement.BaseMoveSpeed) * verticalStrength;
                 float percent = Mathf.Max(xPercent, yPercent);
-                
+
                 _headBobTimer += Time.deltaTime * headBobSpeed;
 
                 headBob.localPosition = new Vector3(0,
@@ -55,6 +64,14 @@ namespace Code.Players{
                 headBob.localPosition =
                     Vector3.Lerp(headBob.localPosition, Vector3.zero, 10 * Time.deltaTime);
             }
+
+            _currentPitch = Mathf.Lerp(_currentPitch, _goalPitch, inSpeed * Time.deltaTime);
+            _goalPitch = Mathf.Lerp(_goalPitch, 0, outSpeed * Time.deltaTime);
+            pitch.localRotation = Quaternion.Euler(_currentPitch * pitchStrength, 0, 0);
+        }
+
+        public void SetPitch(float amount){
+            _goalPitch += amount;
         }
 
         private void LoadSettings(){
@@ -65,13 +82,21 @@ namespace Code.Players{
                 worldCamera.fieldOfView = 70;
                 PlayerPrefs.SetFloat("fov", worldCamera.fieldOfView);
             }
-            
+
             if (PlayerPrefs.HasKey("head_bob")){
-                headBobStrength = (int)PlayerPrefs.GetFloat("head_bob");
+                headBobStrength = PlayerPrefs.GetFloat("head_bob");
             }
             else{
                 headBobStrength = 1;
                 PlayerPrefs.SetFloat("head_bob", headBobStrength);
+            }
+            
+            if (PlayerPrefs.HasKey("head_pitch")){
+                pitchStrength = PlayerPrefs.GetFloat("head_pitch");
+            }
+            else{
+                pitchStrength = 1;
+                PlayerPrefs.SetFloat("head_pitch", pitchStrength);
             }
         }
     }

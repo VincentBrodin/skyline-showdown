@@ -637,6 +637,10 @@ MonoBehaviour:
   headBobAmount: 0.05
   verticalStrength: 1
   horizontalStrength: 0.5
+  pitchStrength: 1
+  pitch: {fileID: 4448613014649849949}
+  inSpeed: 15
+  outSpeed: 5
   worldCamera: {fileID: 8164954355120998171}
   cameraHolder: {fileID: 529895886388309300}
   cameraPosition: {fileID: 4334916131803247831}
@@ -1063,7 +1067,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1163914818363209713}
+  - {fileID: 4448613014649849949}
   m_Father: {fileID: 529895886388309300}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2117788062927735503
@@ -1164,6 +1168,38 @@ Transform:
   m_Children:
   - {fileID: 874861567633787959}
   m_Father: {fileID: 1493518769121971063}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2415667810829353137
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4448613014649849949}
+  m_Layer: 6
+  m_Name: Pitch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4448613014649849949
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2415667810829353137}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1163914818363209713}
+  m_Father: {fileID: 3328152370903980197}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2739207775370880909
 GameObject:
@@ -1787,7 +1823,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3328152370903980197}
+  m_Father: {fileID: 4448613014649849949}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &8164954355120998171
 Camera:

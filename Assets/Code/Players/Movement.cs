@@ -47,10 +47,12 @@ namespace Code.Players{
         private Vector3 _groundNormal;
         private Rigidbody _rb;
         private GamePlayer _gamePlayer;
+        private CameraController _cameraController;
 
         private void Start(){
             _rb = GetComponent<Rigidbody>();
             _gamePlayer = GetComponent<GamePlayer>();
+            _cameraController = GetComponent<CameraController>();
             _canJump = true;
 
             SettingsMenu.Singleton.LoadingSettings.AddListener(LoadSettings);
@@ -175,6 +177,8 @@ namespace Code.Players{
             _groundNormal = Vector3.up;
 
             Invoke(nameof(ResetJump), jumpCooldown);
+            
+            _cameraController.SetPitch(-25);
         }
 
         private void ResetJump(){
@@ -303,6 +307,8 @@ namespace Code.Players{
                 //FLOOR
                 if (!IsFloor(normal)) continue;
                 isOnSlope = IsSlope(normal);
+                if(!grounded)
+                    _cameraController.SetPitch(15);
                 grounded = true;
                 _cancelingGrounded = false;
                 _groundNormal = normal;
