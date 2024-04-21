@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Code.Players.GameModes{
     public class KnockBack : NetworkBehaviour{
+        [SyncVar]public float knockBackMultiplier;
         public float knockBackForce;
         private Punch _punch;
         private GamePlayer _gamePlayer;
@@ -24,10 +25,14 @@ namespace Code.Players.GameModes{
 
             _gamePlayer = GetComponent<GamePlayer>();
             _rb = GetComponent<Rigidbody>();
+
+            if (isLocalPlayer)
+                knockBackMultiplier = 1;
         }
         
         private void OnHit(Punch.HitData hitData){
-            if(_gamePlayer.gameMode == GameMode.KingOfTheHill) return;
+            if (_gamePlayer.gameMode == GameMode.KingOfTheHill)
+                _gamePlayer.GiveScore(10, "HIT PLAYER");
             
             SetKnockBack(hitData.VictimId, knockBackForce, hitData.Direction);
         }
@@ -48,7 +53,29 @@ namespace Code.Players.GameModes{
         [ClientRpc]
         private void ClientSetKnockBack(int player, float force, Vector3 direction){
             if(!isLocalPlayer) return;
-            _rb.AddForce(direction * force, ForceMode.VelocityChange);
+            if (_gamePlayer.gameMode == GameMode.KingOfTheHill){
+                knockBackMultiplier *= 1.25f;
+                _rb.AddForce(direction * force * knockBackMultiplier, ForceMode.VelocityChange);
+                _gamePlayer.GiveScore(-5, "GOT HIT");
+            }
+            else{
+                _rb.AddForce(direction * force, ForceMode.VelocityChange);
+            }
+        }
+
+        public void SetMultiplier(float newValue){
+            ServerSetMultiplier(newValue);
+        }
+
+        [Command(requiresAuthority = false)]
+        private void ServerSetMultiplier(float newValue){
+            ClientSetMultiplier(newValue);
+        }
+
+        [ClientRpc]
+        private void ClientSetMultiplier(float newValue){
+            if(!isLocalPlayer) return;
+            knockBackMultiplier = newValue;
         }
     }
 }

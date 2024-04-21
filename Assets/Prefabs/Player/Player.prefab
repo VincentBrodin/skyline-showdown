@@ -260,9 +260,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94823c74126547c28a45c0e8c4591ed2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
+  syncDirection: 1
   syncMode: 0
   syncInterval: 0
+  knockBackMultiplier: 1
   knockBackForce: 10
 --- !u!114 &4815843707195447799
 MonoBehaviour:

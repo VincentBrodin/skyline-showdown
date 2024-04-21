@@ -103,6 +103,10 @@ namespace Code.Managers{
                 case GameMode.HideAndSeek:
                     SetUpHideAndSeek();
                     break;
+                case GameMode.KingOfTheHill:
+                    SetUpKingOfTheHill();
+                    break;
+                    
             }
         }
         
@@ -125,6 +129,19 @@ namespace Code.Managers{
                 gamePlayer.GetComponent<Tag>().SetTagged(false);
             }
         }
+
+        private void SetUpKingOfTheHill(){
+            if(!isServer) return;
+            ResetMultiplier();
+        }
+
+        
+        private void ResetMultiplier(){
+            foreach (GamePlayer player in Manager().Players){
+                player.GetComponent<KnockBack>().SetMultiplier(1);
+            }
+        }
+        
 
 
         private void SetUpTag(){
