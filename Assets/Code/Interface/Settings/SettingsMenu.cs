@@ -37,6 +37,7 @@ namespace Code.Interface.Settings{
             clearSettings.onClick.AddListener(ClearSettings);
             Hide();
             blocker.SetActive(false);
+            QualitySettings.SetQualityLevel(2);
         }
 
         public void Show(){
@@ -57,6 +58,7 @@ namespace Code.Interface.Settings{
         }
 
         public void LoadSettings(){
+            
             LoadingSettings.Invoke();
             //FPS
             if (PlayerPrefs.HasKey("max_fps")){
@@ -73,7 +75,7 @@ namespace Code.Interface.Settings{
             }
             else{
                 QualitySettings.vSyncCount = 0;
-                PlayerPrefs.SetFloat("vsync", 0);
+                PlayerPrefs.SetInt("vsync", 0);
             }
 
             //Fullscreen
@@ -85,6 +87,24 @@ namespace Code.Interface.Settings{
             else{
                 PlayerPrefs.SetInt("fullscreen", 0);
                 Screen.fullScreen = false;
+            }
+            
+            //Shadows
+            if (PlayerPrefs.HasKey("shadows")){
+                QualitySettings.shadows = (ShadowQuality)PlayerPrefs.GetInt("shadows");
+            }
+            else{
+                QualitySettings.shadows = ShadowQuality.All;
+                PlayerPrefs.SetInt("shadows", 2);
+            }
+            
+            //Shadows
+            if (PlayerPrefs.HasKey("shadow_quality")){
+                QualitySettings.shadowResolution = (ShadowResolution)PlayerPrefs.GetInt("shadow_quality");
+            }
+            else{
+                QualitySettings.shadowResolution = ShadowResolution.VeryHigh;
+                PlayerPrefs.SetInt("shadow_quality", 3);
             }
 
             //Resolution
