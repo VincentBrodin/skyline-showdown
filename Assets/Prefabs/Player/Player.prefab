@@ -748,7 +748,7 @@ MonoBehaviour:
   networkChannel: 1
   childObjectToSync: {fileID: 0}
   setVelocityInsteadOfPositionOnNonOwners: 1
-  maxPositionDifferenceForVelocitySyncing: 0.1
+  maxPositionDifferenceForVelocitySyncing: 0.5
   useLocalTransformOnly: 0
   ownerChangeIndicator: 1
   receivedStatesCounter: 0
