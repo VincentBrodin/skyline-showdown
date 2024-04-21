@@ -48,6 +48,7 @@ namespace Code.Players{
         private Rigidbody _rb;
         private GamePlayer _gamePlayer;
         private CameraController _cameraController;
+        private float _lastGrounded;
 
         private void Start(){
             _rb = GetComponent<Rigidbody>();
@@ -307,8 +308,9 @@ namespace Code.Players{
                 //FLOOR
                 if (!IsFloor(normal)) continue;
                 isOnSlope = IsSlope(normal);
-                if(!grounded)
+                if (!grounded && _lastGrounded < Time.time - jumpCooldown){
                     _cameraController.SetPitch(15);
+                }
                 grounded = true;
                 _cancelingGrounded = false;
                 _groundNormal = normal;
@@ -324,6 +326,7 @@ namespace Code.Players{
 
         private void StopGrounded(){
             grounded = false;
+            _lastGrounded = Time.time;
             isOnSlope = false;
             _groundNormal = Vector3.up;
         }
