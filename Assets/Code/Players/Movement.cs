@@ -12,12 +12,14 @@ namespace Code.Players{
         public LayerMask groundLayers = 0;
         public float minSlopeAngle = 15f;
         public float maxSlopeAngle = 45f;
-        [Header("Movement Settings")] public float walkSpeed = 70f;
+        [Header("Movement Settings")] 
+        public float walkSpeed = 70f;
         public float counterMovementForce = 10f;
         [Space] public float jumpForce;
         public float jumpCooldown;
         [Range(0, 1)] public float mimicGroundAngle;
         [Space, Range(0, 1)] public float airControll;
+        public float BaseMoveSpeed => walkSpeed / counterMovementForce;
 
 
         [Header("Keyboard Settings")] public KeyCode forward = KeyCode.W;
@@ -42,10 +44,12 @@ namespace Code.Players{
         private Vector3 _groundNormal;
         private Rigidbody _rb;
         private GamePlayer _gamePlayer;
+        private Animator _animator;
 
         private void Start(){
             _rb = GetComponent<Rigidbody>();
             _gamePlayer = GetComponent<GamePlayer>();
+            _animator = GetComponent<Animator>();
             _canJump = true;
 
             SettingsMenu.Singleton.LoadingSettings.AddListener(LoadSettings);
@@ -109,8 +113,9 @@ namespace Code.Players{
 
         private void FixedUpdate(){
             if (!isLocalPlayer) return;
-
+            
             Move();
+            CalculateAnimation();
         }
 
         private void Update(){
@@ -124,6 +129,13 @@ namespace Code.Players{
             }
             else
                 _rb.useGravity = !isOnSlope;
+        }
+
+        private void CalculateAnimation(){
+            Vector3 velocity = orientation.InverseTransformDirection(_rb.velocity/BaseMoveSpeed);
+            velocity.y = 0;
+            _animator.SetFloat("X", velocity.x);
+            _animator.SetFloat("Y", velocity.z);
         }
 
         private void Move(){
