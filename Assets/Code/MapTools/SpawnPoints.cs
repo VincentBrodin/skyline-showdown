@@ -6,6 +6,7 @@ using UnityEngine;
 namespace Code.MapTools{
     public class SpawnPoints : MonoBehaviour{
         public List<Transform> spawnPoints;
+        public bool validate;
         public static SpawnPoints Singleton{ get; private set; }
         private bool _ready;
 
@@ -35,6 +36,10 @@ namespace Code.MapTools{
 
 
         protected void OnValidate(){
+            for (int i = 0; i < transform.childCount; i++){
+                if(!spawnPoints.Contains(transform.GetChild(i))) spawnPoints.Add(transform.GetChild(i));
+            }
+            
             for (int i = 0; i < spawnPoints.Count; i++){
                 Transform spawnPointA = spawnPoints[i];
                 for (int j = 0; j < spawnPoints.Count; j++){
@@ -52,7 +57,10 @@ namespace Code.MapTools{
 
             for (int i = 0; i < spawnPoints.Count; i++){
                 spawnPoints[i].name = $"Spawn Point: {i}";
+                spawnPoints[i].SetSiblingIndex(i);
             }
+            
+           
         }
 
         private void OnDrawGizmos(){
