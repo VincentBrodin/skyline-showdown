@@ -157,7 +157,7 @@ namespace Code.Players{
             
             //If on slope and moving down add force
             if (isOnSlope && _rb.velocity.y > 0){
-                _rb.AddForce(Vector3.down * 15, ForceMode.Acceleration);
+                _rb.AddForce(Vector3.down * 45, ForceMode.Acceleration);
             }
 
             float currentAirControll = grounded ? 1 : airControll;

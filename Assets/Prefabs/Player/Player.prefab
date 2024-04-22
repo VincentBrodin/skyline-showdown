@@ -572,8 +572,8 @@ MonoBehaviour:
   groundLayers:
     serializedVersion: 2
     m_Bits: 1
-  minSlopeAngle: 15
-  maxSlopeAngle: 30
+  minSlopeAngle: 10
+  maxSlopeAngle: 45
   walkSpeed: 70
   counterMovementForce: 10
   jumpForce: 9
