@@ -29,7 +29,7 @@ namespace Code.MapTools{
         }
 
         private void FixedUpdate(){
-            if (_ready || NetworkServer.isLoadingScene || NetworkClient.isLoadingScene) return;
+            if (_ready || NetworkServer.isLoadingScene || NetworkClient.isLoadingScene || !Manager().localPlayer) return;
             _ready = true;
             Manager().localPlayer.Teleport(spawnPoints[Manager().localPlayer.playerId].position);
         }

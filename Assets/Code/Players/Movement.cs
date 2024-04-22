@@ -151,13 +151,15 @@ namespace Code.Players{
         }
 
         private void Move(){
-            //Extra gravity
-            if(!isOnSlope)
-                _rb.AddForce(Vector3.down * 15, ForceMode.Acceleration);
-            
-            //If on slope and moving down add force
-            if (isOnSlope && _rb.velocity.y > 0){
-                _rb.AddForce(Vector3.down * 45, ForceMode.Acceleration);
+            switch (isOnSlope){
+                //Extra gravity
+                case false:
+                    _rb.AddForce(Vector3.down * 15, ForceMode.Acceleration);
+                    break;
+                //If on slope and moving down add force
+                case true when _rb.velocity.y > 0:
+                    _rb.AddForce(Vector3.down * 45, ForceMode.Acceleration);
+                    break;
             }
 
             float currentAirControll = grounded ? 1 : airControll;
