@@ -38,12 +38,16 @@ namespace Code.Interface{
             else{
                 Singleton = this;
             }
+            
+            Manager().OnPlayerAdded.AddListener(AddPlayer);
+            Manager().OnPlayerRemoved.AddListener(RemovePlayer);
         }
+        
 
         private void Start(){
             SettingsMenu.Singleton.LoadingSettings.AddListener(UpdatePrompt);
             show.SetActive(showing);
-
+            
             foreach (GamePlayer gamePlayer in Manager().Players){
                 AddPlayer(gamePlayer);
             }

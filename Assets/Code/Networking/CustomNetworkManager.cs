@@ -11,8 +11,8 @@ namespace Code.Networking{
 
         private int _playerIdCounter;
 
-        public readonly UnityEvent OnPlayerAdded = new();
-        public readonly UnityEvent OnPlayerRemoved = new();
+        public readonly UnityEvent<GamePlayer> OnPlayerAdded = new();
+        public readonly UnityEvent<GamePlayer> OnPlayerRemoved = new();
         public GamePlayer localPlayer;
 
         public List<GamePlayer> Players{ get; } = new();
@@ -32,16 +32,13 @@ namespace Code.Networking{
             if(!Players.Contains(gamePlayer))
                 Players.Add(gamePlayer);
             gamePlayer.name = $"Player {gamePlayer.playerId}";
-            OnPlayerAdded.Invoke();
+            OnPlayerAdded.Invoke(gamePlayer);
             
-            PlayerList.Singleton.AddPlayer(gamePlayer);
         }
 
         public void RemovePlayer(GamePlayer gamePlayer){
             Players.Remove(gamePlayer);
-            OnPlayerRemoved.Invoke();
-            
-            PlayerList.Singleton.RemovePlayer(gamePlayer);
+            OnPlayerRemoved.Invoke(gamePlayer);
         }
     }
 }
