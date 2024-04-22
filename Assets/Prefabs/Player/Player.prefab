@@ -576,7 +576,7 @@ MonoBehaviour:
   maxSlopeAngle: 30
   walkSpeed: 70
   counterMovementForce: 10
-  jumpForce: 7.5
+  jumpForce: 9
   jumpCooldown: 0.2
   mimicGroundAngle: 0.25
   airControll: 0.25
@@ -639,7 +639,7 @@ MonoBehaviour:
   horizontalStrength: 0.5
   pitchStrength: 1
   pitch: {fileID: 4448613014649849949}
-  inSpeed: 15
+  inSpeed: 10
   outSpeed: 5
   worldCamera: {fileID: 8164954355120998171}
   cameraHolder: {fileID: 529895886388309300}
@@ -975,6 +975,11 @@ MonoBehaviour:
   leftFootAudioSource: {fileID: 137872820531458768}
   rightFoot: {fileID: 3258721474462289637}
   rightFootAudioSource: {fileID: 671656930139557144}
+  useExperimental: 1
+  experimentalFeatures:
+    useRbSpeed: 1
+    rb: {fileID: 7767465671601477862}
+    rbSpeedCutoff: 1
 --- !u!1 &1489766455942417581
 GameObject:
   m_ObjectHideFlags: 0
