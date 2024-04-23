@@ -20,6 +20,7 @@ namespace Code.Players{
 
         [SerializeField] private SkinnedMeshRenderer[] meshRenderers;
         private Rigidbody _rb;
+        private Transform _transform;
 
         private CustomNetworkManager _manager;
 
@@ -32,6 +33,7 @@ namespace Code.Players{
 
         private void Start(){
             _rb = GetComponent<Rigidbody>();
+            _transform = transform;
 
             if (isLocalPlayer){
                 //Update player values
@@ -90,7 +92,7 @@ namespace Code.Players{
             _rb.velocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
             _rb.position = teleportTo;
-            transform.position = teleportTo;
+            _transform.position = teleportTo;
         }
 
         public void Freeze(){
@@ -150,6 +152,9 @@ namespace Code.Players{
             ScoreUi.Singleton.UpdateScore(scoreToGive, prompt);
         }
 
+        public Vector3 Position(){
+            return _transform.position;
+        }
        
     }
 }
