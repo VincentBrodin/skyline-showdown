@@ -149,5 +149,7 @@ namespace Code.Players{
                 score += scoreToGive;
             ScoreUi.Singleton.UpdateScore(scoreToGive, prompt);
         }
+
+       
     }
 }
