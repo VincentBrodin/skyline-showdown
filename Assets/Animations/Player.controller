@@ -206,7 +206,7 @@ BlendTree:
       type: 3}
     m_Threshold: 0.625
     m_Position: {x: 0.5, y: -0.5}
-    m_TimeScale: 1.25
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: X
     m_Mirror: 0
@@ -215,7 +215,7 @@ BlendTree:
       type: 3}
     m_Threshold: 0.7291666
     m_Position: {x: -0.5, y: -0.5}
-    m_TimeScale: 1.25
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: X
     m_Mirror: 0
@@ -224,7 +224,7 @@ BlendTree:
       type: 3}
     m_Threshold: 0.8333333
     m_Position: {x: 0, y: -1}
-    m_TimeScale: 1.25
+    m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: X
     m_Mirror: 0
