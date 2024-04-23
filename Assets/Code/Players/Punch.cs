@@ -1,4 +1,5 @@
-﻿using Mirror;
+﻿using Code.Managers;
+using Mirror;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -31,6 +32,7 @@ namespace Code.Players{
 
         private void Update(){
             if (!isLocalPlayer) return;
+            if(CursorManager.Singleton.WindowsOpend) return;
             if (!Input.GetKeyDown(KeyCode.Mouse0) || !_canPunch) return;
             
             _canPunch = false;

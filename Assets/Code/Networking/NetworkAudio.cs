@@ -7,7 +7,7 @@ namespace Code.Networking{
         public AudioSource audioSource;
 
         [SyncVar, Range(0, 1)] public float volume = 1;
-        [SyncVar, Range(-3 ,3)] public float pitch = 1;
+        [SyncVar, Range(-3, 3)] public float pitch = 1;
 
         private void Start(){
             if (!isServer) return;
@@ -21,7 +21,7 @@ namespace Code.Networking{
         public void Play(){
             CmdPlay();
         }
-        
+
         [Command(requiresAuthority = false)]
         private void CmdPlay(){
             ClientPlay();
@@ -50,7 +50,7 @@ namespace Code.Networking{
         private void ClientStop(){
             audioSource.Stop();
         }
-        
+
         /// <summary>
         /// Syncs the PlayDelay function from AudioSource to all clients
         /// </summary>
@@ -58,19 +58,19 @@ namespace Code.Networking{
         public void PlayDelay(float delay){
             CmdPlayDelay(delay);
         }
-        
+
         [Command(requiresAuthority = false)]
         private void CmdPlayDelay(float delay){
             ClientPlayDelay(delay);
         }
-        
+
         [ClientRpc]
         private void ClientPlayDelay(float delay){
             audioSource.pitch = pitch;
             audioSource.volume = volume;
             audioSource.PlayDelayed(delay);
         }
-        
+
         /// <summary>
         /// Syncs the volume between clients
         /// </summary>
@@ -81,10 +81,20 @@ namespace Code.Networking{
 
         [Command(requiresAuthority = false)]
         private void CmdSetVolume(float newValue){
+            if (syncDirection == SyncDirection.ServerToClient){
+                newValue = Mathf.Clamp(newValue, 0, 1);
+                volume = newValue;
+            }
+            else
+                ClientSetVolume(newValue);
+        }
+
+        [ClientRpc]
+        private void ClientSetVolume(float newValue){
             newValue = Mathf.Clamp(newValue, 0, 1);
             volume = newValue;
         }
-        
+
         /// <summary>
         /// Syncs the pitch between clients
         /// </summary>
@@ -95,6 +105,16 @@ namespace Code.Networking{
 
         [Command(requiresAuthority = false)]
         private void CmdSetPitch(float newValue){
+            if (syncDirection == SyncDirection.ServerToClient){
+                newValue = Mathf.Clamp(newValue, -3, 3);
+                pitch = newValue;
+            }
+            else
+                ClientSetPitch(newValue);
+        }
+
+        [ClientRpc]
+        private void ClientSetPitch(float newValue){
             newValue = Mathf.Clamp(newValue, -3, 3);
             pitch = newValue;
         }

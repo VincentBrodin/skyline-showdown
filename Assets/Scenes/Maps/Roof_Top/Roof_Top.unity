@@ -5888,6 +5888,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 629f1be6e81b4130ad7b83bf6d4329af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  losePointsOnTp: 1
+  amount: -25
+  prompt: OPPS
 --- !u!1 &889162273
 GameObject:
   m_ObjectHideFlags: 0
