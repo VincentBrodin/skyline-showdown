@@ -173,6 +173,10 @@ namespace Code.Interface.Settings{
                 PlayerPrefs.SetInt("jump", (int)KeyCode.Space);
             }
             
+            if (!PlayerPrefs.HasKey("jump")){
+                PlayerPrefs.SetInt("jump", (int)KeyCode.LeftControl);
+            }
+            
             if (!PlayerPrefs.HasKey("interactive")){
                 PlayerPrefs.SetInt("interactive", (int)KeyCode.E);
             }
