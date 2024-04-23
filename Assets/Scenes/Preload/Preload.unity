@@ -1973,6 +1973,8 @@ GameObject:
   - component: {fileID: 1912455444}
   - component: {fileID: 1912455446}
   - component: {fileID: 1912455447}
+  - component: {fileID: 1912455449}
+  - component: {fileID: 1912455448}
   m_Layer: 0
   m_Name: Network Manager
   m_TagString: Untagged
@@ -2012,6 +2014,7 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 1
   spawnPrefabs:
+  - {fileID: 2673988157497517048, guid: 18af6d6c64531fa4aaa8faa0cef1cf2b, type: 3}
   - {fileID: 1366613145405582605, guid: 4fe98eb82424989428010458efcbda03, type: 3}
   - {fileID: 146908, guid: f3d971a1e873f36458c41f7efa9f42f7, type: 3}
   - {fileID: 146908, guid: 1b7e591c94ccda349b09072649f31f59, type: 3}
@@ -2089,6 +2092,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8aea0e7e97cb8345883cb2051d27fc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1912455448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1912455443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88c37d3deca7a834d80cfd8d3cfcc510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  networkDiscovery: {fileID: 1912455449}
+--- !u!114 &1912455449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1912455443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c761308e733c51245b2e8bb4201f46dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableActiveDiscovery: 1
+  BroadcastAddress: 
+  serverBroadcastListenPort: 47777
+  ActiveDiscoveryInterval: 3
+  transport: {fileID: 1912455446}
+  OnServerFound:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1912455448}
+        m_TargetAssemblyTypeName: Mirror.Discovery.NetworkDiscoveryHUD, Mirror.Components
+        m_MethodName: OnDiscoveredServer
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  secretHandshake: 4576087026979233451
 --- !u!1001 &2103466125
 PrefabInstance:
   m_ObjectHideFlags: 0
