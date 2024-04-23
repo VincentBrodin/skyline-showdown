@@ -1,4 +1,5 @@
 ﻿using Code.Players;
+using Code.Players.GameModes;
 using UnityEngine;
 
 namespace Code.MapTools{
@@ -10,6 +11,7 @@ namespace Code.MapTools{
             
             gamePlayer.Teleport(SpawnPoints.Singleton.spawnPoints[gamePlayer.playerId].position);
             gamePlayer.GiveScore(-25, "OPPPS");
+            gamePlayer.GetComponent<KnockBack>().SetMultiplier(1);
         }
     }
 }

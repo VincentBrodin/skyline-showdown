@@ -3,29 +3,44 @@ using Code.Interface.Settings;
 using Code.Managers;
 using Mirror;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Code.Players{
     public class Movement : NetworkBehaviour{
         public bool grounded;
+        public bool crouching;
         public bool isOnSlope;
-        [Header("General Settings")] 
-        public LayerMask groundLayers = 0;
+        [Header("General Settings")] public LayerMask groundLayers = 0;
         public float minSlopeAngle = 15f;
         public float maxSlopeAngle = 45f;
         [Header("Movement Settings")] 
         public float walkSpeed = 70f;
+        public float crouchSpeed = 30f;
         public float counterMovementForce = 10f;
         [Space] public float jumpForce;
         public float jumpCooldown;
         [Range(0, 1)] public float mimicGroundAngle;
         [Space, Range(0, 1)] public float airControll;
-        public float BaseMoveSpeed => walkSpeed / counterMovementForce;
+        private bool _startedWalking;
+        public float BaseMoveSpeed => CurrentMoveSpeed / counterMovementForce;
+
+        private float CurrentMoveSpeed {
+            get{
+                if (!grounded) return walkSpeed;
+                return crouching ? crouchSpeed : walkSpeed;
+            }
+        }
+
+        [FormerlySerializedAs("crouchSpeed")] [Header("Crouch Settings")] 
+        public float crouchTransitionSpeed;
+        public float targetCrouchHeight;
 
 
         [Header("Keyboard Settings")] public KeyCode forward = KeyCode.W;
         public KeyCode back = KeyCode.S;
         public KeyCode left = KeyCode.A;
         public KeyCode right = KeyCode.D;
+        [Space] public KeyCode crouch = KeyCode.LeftControl;
         [Space] public KeyCode jump = KeyCode.Space;
         [Space] public bool useInterpolation;
         public float interpolationSpeed;
@@ -35,11 +50,12 @@ namespace Code.Players{
         [Space] public bool invertY = true;
         public float ySensitivity = 1;
 
-        [Header("References")] 
-        public Transform orientation;
+        [Header("References")] public Transform orientation;
+        public Transform colliderTransform;
         public Transform cameraHolder;
         public Transform rotation;
         public Animator animator;
+        public Animator handsAnimator;
 
         private float _xMouse, _yMouse;
         private float _xKeyboard, _xKeyboardRaw, _yKeyboard, _yKeyboardRaw;
@@ -49,15 +65,21 @@ namespace Code.Players{
         private GamePlayer _gamePlayer;
         private CameraController _cameraController;
         private float _lastGrounded;
+        private float _goalCrouchHeight, _currentCrouchHeight;
+        private Vector3 _colliderSize;
 
         private void Start(){
             _rb = GetComponent<Rigidbody>();
             _gamePlayer = GetComponent<GamePlayer>();
             _cameraController = GetComponent<CameraController>();
             _canJump = true;
+            _colliderSize = colliderTransform.localScale;
 
             SettingsMenu.Singleton.LoadingSettings.AddListener(LoadSettings);
             LoadSettings();
+
+            _currentCrouchHeight = 1;
+            _goalCrouchHeight = 1;
         }
 
         private void LoadSettings(){
@@ -113,11 +135,18 @@ namespace Code.Players{
             else{
                 PlayerPrefs.SetInt("jump", (int)jump);
             }
+
+            if (PlayerPrefs.HasKey("crouch")){
+                crouch = (KeyCode)Enum.ToObject(typeof(KeyCode), PlayerPrefs.GetInt("crouch"));
+            }
+            else{
+                PlayerPrefs.SetInt("crouch", (int)crouch);
+            }
         }
 
         private void FixedUpdate(){
             if (!isLocalPlayer) return;
-            
+
             Move();
             CalculateAnimation();
         }
@@ -127,27 +156,39 @@ namespace Code.Players{
             UpdateInputs();
             UpdateRotations();
             Jump();
-            
+
             if (!_canJump){
-                _rb.useGravity  = true;
+                _rb.useGravity = true;
             }
             else
                 _rb.useGravity = !isOnSlope;
+
+            _currentCrouchHeight = Mathf.Lerp(_currentCrouchHeight, _goalCrouchHeight, crouchTransitionSpeed * Time.deltaTime);
+            _colliderSize.y = _currentCrouchHeight;
+            colliderTransform.localScale = _colliderSize;
         }
 
         private void CalculateAnimation(){
             //Convert global velocity to local relative to the players orientation
-            Vector3 velocity = orientation.InverseTransformDirection(_rb.velocity/BaseMoveSpeed);
+            Vector3 velocity = orientation.InverseTransformDirection(_rb.velocity / BaseMoveSpeed);
             velocity.y = 0;
             animator.SetFloat("X", velocity.x);
             animator.SetFloat("Y", velocity.z);
-            
+
+            handsAnimator.SetFloat("X", velocity.x);
+            handsAnimator.SetFloat("Y", velocity.z);
+
+
             //Look IK
             rotation.rotation = Quaternion.Euler(_yMouse, _xMouse, 0);
             rotation.position = orientation.position + new Vector3(0, 1, 0) + rotation.forward * 5;
-            
+
             //Adding player states
             animator.SetBool("Grounded", grounded);
+            handsAnimator.SetBool("Grounded", grounded);
+
+            animator.SetBool("Crouch", crouching);
+            handsAnimator.SetBool("Crouch", crouching);
         }
 
         private void Move(){
@@ -163,7 +204,7 @@ namespace Code.Players{
             }
 
             float currentAirControll = grounded ? 1 : airControll;
-            Vector3 walkForce = GetDesiredDirection() * (walkSpeed * currentAirControll);
+            Vector3 walkForce = GetDesiredDirection() * (CurrentMoveSpeed * currentAirControll);
             _rb.AddForce(walkForce, ForceMode.Acceleration);
 
             CounterMovement();
@@ -180,14 +221,14 @@ namespace Code.Players{
             _groundNormal = Vector3.up;
 
             Invoke(nameof(ResetJump), jumpCooldown);
-            
+
             _cameraController.SetPitch(-25);
         }
 
         private void ResetJump(){
             _canJump = true;
         }
-        
+
 
         private void CounterMovement(){
             //General countermovement.
@@ -198,19 +239,19 @@ namespace Code.Players{
 
             velocity *= -1;
             velocity = Vector3.ProjectOnPlane(velocity, _groundNormal);
-            
+
 
             float currentAirControll = grounded ? 1 : airControll;
 
             Vector3 force = velocity * (counterMovementForce * currentAirControll);
 
-            if(!grounded)
-                force = Vector3.ClampMagnitude(force, walkSpeed * currentAirControll);
-         
+            if (!grounded)
+                force = Vector3.ClampMagnitude(force, CurrentMoveSpeed * currentAirControll);
+
             _rb.AddForce(force, ForceMode.Acceleration);
 
             //Harder stops if velocity is low to stop sliping.
-            if (velocity.magnitude < 1f && grounded){
+            if (velocity.magnitude < 1f && grounded && !_startedWalking){
                 _rb.AddForce(velocity * (counterMovementForce * 2), ForceMode.Acceleration);
             }
         }
@@ -236,25 +277,23 @@ namespace Code.Players{
 
         private void UpdateInputs(){
             if (CursorManager.Singleton.WindowsOpend){
-              
                 return;
             }
-            
+
             //Update all inputs
             _xMouse += Input.GetAxis("Mouse X") * xSensitivity * (invertX ? -1 : 1);
             _yMouse += Input.GetAxis("Mouse Y") * ySensitivity * (invertY ? -1 : 1);
 
             _yMouse = Mathf.Clamp(_yMouse, -85, 85);
 
-            if(_gamePlayer.frozen)
-            {
+            if (_gamePlayer.frozen){
                 _xKeyboard = 0;
                 _xKeyboardRaw = 0;
                 _yKeyboard = 0;
                 _yKeyboardRaw = 0;
                 return;
             }
-            
+
             _xKeyboardRaw = 0;
             if (Input.GetKey(right))
                 _xKeyboardRaw += 1;
@@ -280,6 +319,23 @@ namespace Code.Players{
             else{
                 _xKeyboard = _xKeyboardRaw;
                 _yKeyboard = _yKeyboardRaw;
+            }
+
+            _startedWalking = _xKeyboardRaw != 0 || _yKeyboardRaw != 0;
+
+            if (grounded && Input.GetKey(crouch) && !crouching){
+                crouching = true;
+                _goalCrouchHeight = targetCrouchHeight;
+            }
+
+            if (crouching && !grounded){
+                crouching = false;
+                _goalCrouchHeight = 1;
+            }
+
+            if (!Input.GetKey(crouch) && crouching){
+                crouching = false;
+                _goalCrouchHeight = 1;
             }
         }
 
@@ -313,6 +369,7 @@ namespace Code.Players{
                 if (!grounded && _lastGrounded < Time.time - jumpCooldown){
                     _cameraController.SetPitch(15);
                 }
+
                 grounded = true;
                 _cancelingGrounded = false;
                 _groundNormal = normal;
