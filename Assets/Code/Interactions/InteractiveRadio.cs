@@ -10,8 +10,11 @@ namespace Code.Interactions{
 
         private void Start(){
             interactive.OnInteraction.AddListener(Switch);
-        }
 
+            audioSource.Stop();
+            audioSource.clip = tracks[currentTrack];
+            audioSource.Play();
+        }
         private void Switch(){
             ServerSwitch();
         }

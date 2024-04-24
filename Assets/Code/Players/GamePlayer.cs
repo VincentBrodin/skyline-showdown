@@ -2,6 +2,7 @@
 using Code.Managers;
 using Code.Networking;
 using Code.Tools;
+using Code.Viewers;
 using Mirror;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -59,21 +60,24 @@ namespace Code.Players{
         }
 
         private void OnDestroy(){
-            if(GetComponent<CameraController>() && GetComponent<CameraController>().cameraHolder)
-                Destroy(GetComponent<CameraController>().cameraHolder.gameObject);
+            Kick();
             (NetworkManager.singleton as CustomNetworkManager)?.RemovePlayer(this);
         }
 
         public override void OnStopClient(){
-            if(GetComponent<CameraController>() && GetComponent<CameraController>().cameraHolder)
-                Destroy(GetComponent<CameraController>().cameraHolder.gameObject);
+            Kick();
             Manager().RemovePlayer(this);
             base.OnStopClient();
         }
 
 
         public void Kick(){
-            DestroyImmediate(GetComponent<CameraController>().cameraHolder.gameObject);
+            if (isLocalPlayer){
+                if(ViewerManager.Singleton)
+                    DestroyImmediate(ViewerManager.Singleton.gameObject);
+            }
+            if(GetComponent<CameraController>() && GetComponent<CameraController>().cameraHolder)
+                DestroyImmediate(GetComponent<CameraController>().cameraHolder.gameObject);
         }
 
         public void Teleport(Vector3 teleportTo){
