@@ -14,6 +14,7 @@ namespace Code.Players{
         [SyncVar] public string playerName;
         [SyncVar] public bool frozen;
         [SyncVar] public int score;
+        public bool firstTimeInLobby = true;
         [SyncVar(hook = nameof(GameModeChanged))]
         public GameMode gameMode = GameMode.None;
         [Space]
@@ -22,7 +23,6 @@ namespace Code.Players{
         [SerializeField] private SkinnedMeshRenderer[] meshRenderers;
         private Rigidbody _rb;
         private Transform _transform;
-
         private CustomNetworkManager _manager;
 
         private CustomNetworkManager Manager(){

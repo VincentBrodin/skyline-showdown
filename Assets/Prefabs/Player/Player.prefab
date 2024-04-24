@@ -999,6 +999,7 @@ MonoBehaviour:
   playerName: 
   frozen: 0
   score: 0
+  firstTimeInLobby: 1
   gameMode: 0
   personalLayer: 7
   meshRenderers:

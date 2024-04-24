@@ -1,6 +1,7 @@
 ﻿using System;
 using Code.Interface;
 using Code.Managers;
+using Code.MapTools;
 using Code.Networking;
 using Code.Tools;
 using Mirror;
@@ -27,9 +28,9 @@ namespace Code.Interactions{
         private void Load(){
             Enum.TryParse(gameMode.options[gameMode.currentSelected].id, out GameMode gameModeToSet);
             UpdateData(gameModeToSet);
-            Invoke(nameof(FadeIn), 3);
-            Invoke(nameof(ChangeScene), 4f);
-            Countdown.Singleton.StartCountdown(3, "STARTING IN:");
+            Invoke(nameof(FadeIn), 5f);
+            Invoke(nameof(ChangeScene), 6f);
+            Countdown.Singleton.StartCountdown(5f, "STARTING IN:");
         }
 
 
@@ -45,6 +46,7 @@ namespace Code.Interactions{
         [ClientRpc]
         private void ClientUpdateData(GameMode gameModeToSet){
             Manager().localPlayer.gameMode = gameModeToSet;
+            IntroSound.Singleton.PlayLockIn();
         }
         
         private void FadeIn(){
