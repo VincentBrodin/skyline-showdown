@@ -11,6 +11,7 @@ namespace Code.Players{
         public float cooldown;
         public LayerMask layerMask;
         public Transform worldCamera;
+        public int lastGotHitBy = -1;
 
         public readonly UnityEvent<HitData> OnHit = new();
 
@@ -72,22 +73,23 @@ namespace Code.Players{
                 VictimId = gamePlayer.playerId
             });
 
-            gamePlayer.GetComponent<Punch>().GotHit();
+            gamePlayer.GetComponent<Punch>().GotHit(_gamePlayer.playerId);
         }
         
-        private void GotHit(){
-            ServerGotHit();
+        private void GotHit(int byPlayer){
+            ServerGotHit(byPlayer);
         }
 
         [Command(requiresAuthority = false)]
-        private void ServerGotHit(){
-            ClientGotHit();
+        private void ServerGotHit(int byPlayer){
+            ClientGotHit(byPlayer);
         }
 
         [ClientRpc]
-        private void ClientGotHit(){
+        private void ClientGotHit(int byPlayer){
             if(!isLocalPlayer) return;
             _cameraController.SetPitch(-15);
+            lastGotHitBy = byPlayer;
         }
     }
 }

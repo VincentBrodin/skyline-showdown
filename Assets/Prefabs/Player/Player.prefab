@@ -1020,20 +1020,24 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   grounded: 0
+  sliding: 0
   crouching: 0
   isOnSlope: 0
   groundLayers:
     serializedVersion: 2
     m_Bits: 1
   minSlopeAngle: 10
-  maxSlopeAngle: 45
-  walkSpeed: 70
-  crouchSpeed: 30
+  maxSlopeAngle: 25
+  walkSpeed: 85
+  slideSpeed: 125
+  maxSlideSpeed: 200
+  crouchSpeed: 35
   counterMovementForce: 10
   jumpForce: 9
   jumpCooldown: 0.2
   mimicGroundAngle: 0.25
-  airControll: 0.25
+  airControll: 0.5
+  slideTime: 1.25
   crouchTransitionSpeed: 10
   targetCrouchHeight: 0.75
   forward: 119
