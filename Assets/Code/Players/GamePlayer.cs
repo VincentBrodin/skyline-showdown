@@ -1,11 +1,14 @@
-﻿using Code.Interface;
+﻿using System;
+using Code.Interface;
 using Code.Managers;
 using Code.Networking;
 using Code.Tools;
 using Code.Viewers;
 using Mirror;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Random = UnityEngine.Random;
 
 namespace Code.Players{
     public class GamePlayer : NetworkBehaviour{
@@ -14,6 +17,7 @@ namespace Code.Players{
         [SyncVar] public string playerName;
         [SyncVar] public bool frozen;
         [SyncVar] public int score;
+        public TextMeshPro nameTag;
         public bool firstTimeInLobby = true;
         [SyncVar(hook = nameof(GameModeChanged))]
         public GameMode gameMode = GameMode.None;
@@ -23,8 +27,9 @@ namespace Code.Players{
         [SerializeField] private SkinnedMeshRenderer[] meshRenderers;
         private Rigidbody _rb;
         private Transform _transform;
-        private CustomNetworkManager _manager;
+        private float _nameTagUpdate;
 
+        private CustomNetworkManager _manager;
         private CustomNetworkManager Manager(){
             if (_manager == null)
                 _manager = NetworkManager.singleton as CustomNetworkManager;
@@ -52,11 +57,18 @@ namespace Code.Players{
                 foreach (SkinnedMeshRenderer meshRenderer in meshRenderers){
                     meshRenderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
                 }
+                nameTag.gameObject.SetActive(false);
             }
 
             Manager().AddPlayer(this);
 
             DontDestroyOnLoad(gameObject);
+        }
+
+        private void FixedUpdate(){
+            if(_nameTagUpdate > Time.time) return;
+            _nameTagUpdate = Time.time + 1f;
+            nameTag.text = playerName;
         }
 
         private void OnDestroy(){
@@ -158,6 +170,21 @@ namespace Code.Players{
 
         public Vector3 Position(){
             return _transform.position;
+        }
+
+        public void SetNameTagVisibility(bool newValue){
+            ServerSetNameTagVisibility(newValue);
+        }
+
+        [Command(requiresAuthority = false)]
+        private void ServerSetNameTagVisibility(bool newValue){
+            ClientSetNameTagVisibility(newValue);
+        }
+
+        [ClientRpc]
+        private void ClientSetNameTagVisibility(bool newValue){
+            if(isLocalPlayer) return;
+            nameTag.gameObject.SetActive(newValue);
         }
        
     }

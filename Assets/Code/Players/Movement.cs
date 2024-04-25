@@ -393,6 +393,7 @@ namespace Code.Players{
                     _timeSinceSlopeStarted = 0;
                 }
                 _goalCrouchHeight = targetCrouchHeight;
+                _gamePlayer.SetNameTagVisibility(false);
             }
 
             if (crouching && !grounded){
@@ -400,6 +401,7 @@ namespace Code.Players{
                 sliding = false;
                 _slideTimerStarted = false;
                 _goalCrouchHeight = 1;
+                _gamePlayer.SetNameTagVisibility(true);
             }
 
             if (!Input.GetKey(crouch) && crouching){
@@ -407,6 +409,7 @@ namespace Code.Players{
                 sliding = false;
                 _slideTimerStarted = false;
                 _goalCrouchHeight = 1;
+                _gamePlayer.SetNameTagVisibility(true);
             }
         }
 
