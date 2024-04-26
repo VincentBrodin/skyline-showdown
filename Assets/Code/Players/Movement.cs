@@ -15,15 +15,19 @@ namespace Code.Players{
         public float maxSlopeAngle = 45f;
         public bool canSlide;
         [Header("Movement Settings")] public float walkSpeed = 70f;
+        public float crouchSpeed = 30f;
+        [Space]
         public float slideSpeed = 125;
         public float maxSlideSpeed;
-        public float crouchSpeed = 30f;
+        [Space]
         public float counterMovementForce = 10f;
         public float airCounterMove = 1f;
+        [Space]
         public float airSpeed = 17f;
         public float stunSpeed = 5f;
         [Space] public float jumpForce;
         public float jumpCooldown;
+        public float jumpQueLife;
         [Range(0, 1)] public float mimicGroundAngle;
         private bool _startedWalking;
         public float CurrentMaxMoveSpeed => CurrentMoveSpeed / CurrentCounterForce;
@@ -89,6 +93,7 @@ namespace Code.Players{
         private float _slideTimer;
         private float _timeSinceSlopeStarted;
         private bool _slideTimerStarted;
+        private bool _queJump;
 
         private void OnGUI(){
             Rect position = new Rect{
@@ -227,6 +232,16 @@ namespace Code.Players{
             if (sliding && !_slideTimerStarted){
                 _timeSinceSlopeStarted += Time.deltaTime;
             }
+
+            if (Input.GetKeyDown(jump) && !grounded){
+                _queJump = true;
+                CancelInvoke(nameof(ResetJumpQue));
+                Invoke(nameof(ResetJumpQue), jumpQueLife);
+            }
+        }
+
+        private void ResetJumpQue(){
+            _queJump = false;
         }
 
         private void CalculateAnimation(){
@@ -279,16 +294,25 @@ namespace Code.Players{
 
         private void Jump(){
             //Makes it so the player can only jump on the ground
-            if (!_canJump || !grounded || !Input.GetKeyDown(jump) || CursorManager.Singleton.WindowsOpend) return;
+            if (CursorManager.Singleton.WindowsOpend) return;
+            if(!Input.GetKeyDown(jump) && !_queJump) return;
+            if (!_canJump) return;
+            if(!grounded) return;
 
+            Vector3 velocity = _rb.velocity;
+            velocity.y = 0;
+            _rb.velocity = velocity;
             Vector3 jumpNormal = Vector3.Lerp(Vector3.up, _groundNormal, mimicGroundAngle);
-
             _rb.AddForce(jumpNormal * jumpForce, ForceMode.VelocityChange);
 
             _groundNormal = Vector3.up;
-
+            
+            _canJump = false;
             Invoke(nameof(ResetJump), jumpCooldown);
-
+            
+            _queJump = false;
+            CancelInvoke(nameof(ResetJumpQue));
+            
             _cameraController.SetPitch(-25);
         }
 

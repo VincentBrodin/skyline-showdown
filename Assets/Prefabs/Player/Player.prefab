@@ -1035,15 +1035,16 @@ MonoBehaviour:
   maxSlopeAngle: 25
   canSlide: 0
   walkSpeed: 85
+  crouchSpeed: 35
   slideSpeed: 125
   maxSlideSpeed: 200
-  crouchSpeed: 35
   counterMovementForce: 10
   airCounterMove: 1.5
   airSpeed: 12.5
   stunSpeed: 5
   jumpForce: 9
   jumpCooldown: 0.2
+  jumpQueLife: 0.2
   mimicGroundAngle: 0.25
   slideTime: 1.25
   crouchTransitionSpeed: 10
