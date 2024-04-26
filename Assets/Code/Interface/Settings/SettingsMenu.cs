@@ -192,6 +192,10 @@ namespace Code.Interface.Settings{
             if (!PlayerPrefs.HasKey("head_pitch")){
                 PlayerPrefs.SetFloat("head_pitch", 1);
             }
+            
+            if (!PlayerPrefs.HasKey("warning_blink")){
+                PlayerPrefs.SetInt("warning_blink", 1);
+            }
         }
 
         private void LateUpdate(){

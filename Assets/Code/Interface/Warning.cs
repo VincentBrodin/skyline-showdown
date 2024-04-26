@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Code.Interface.Settings;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Code.Interface{
@@ -21,12 +22,24 @@ namespace Code.Interface{
             }
         }
 
+        private bool _showBlink;
+
         private void Start(){
             Set(0);
+            
+            SettingsMenu.Singleton.LoadingSettings.AddListener(OnSettingsLoad);
+            OnSettingsLoad();
         }
+
+        private void OnSettingsLoad(){
+            _showBlink = PlayerPrefs.GetInt("warning_blink") == 1;
+        }
+        
+        
 
 
         private void Update(){
+            if(!_showBlink) return;
             _timer += Time.deltaTime * flashSpeed;
             float sin = 0.5f * (1 + Mathf.Sin(2 * Mathf.PI * _timer));
             color.a = sin * _alpha;
@@ -34,6 +47,7 @@ namespace Code.Interface{
         }
 
         public void Set(float percent){
+            if(!_showBlink) return;
             _alpha = Mathf.Lerp(0, endAlpha, percent);
         }
     }

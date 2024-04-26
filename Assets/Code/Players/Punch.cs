@@ -8,6 +8,7 @@ using UnityEngine.Events;
 namespace Code.Players{
     public class Punch : NetworkBehaviour{
         public float range;
+        public float radius;
         public float cooldown;
         public LayerMask layerMask;
         public Transform worldCamera;
@@ -28,6 +29,8 @@ namespace Code.Players{
 
         private GamePlayer _gamePlayer;
         private CameraController _cameraController;
+
+        private Ray _ray;
 
         private void Start(){
             _gamePlayer = GetComponent<GamePlayer>();
@@ -52,8 +55,9 @@ namespace Code.Players{
 
             _nextPunch = Time.time + cooldown;
             _cameraController.SetPitch(15);
-
-            if (!Physics.Raycast(worldCamera.position, worldCamera.forward, out _hit, range, layerMask)){
+            _ray.origin = worldCamera.position;
+            _ray.direction = worldCamera.forward;
+            if (!Physics.SphereCast(_ray, radius, out _hit, range, layerMask)){
                 Debug.Log("Punch Miss");
                 return;
             }
