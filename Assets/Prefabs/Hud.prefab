@@ -1340,7 +1340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0, b: 0, a: 0}
   image: {fileID: 4676637733533976823}
-  endAlpha: 0.25
+  endAlpha: 0.0625
   flashSpeed: 0.5
 --- !u!114 &397842107154071929
 MonoBehaviour:

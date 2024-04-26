@@ -347,7 +347,7 @@ namespace Code.Players{
 
             _yMouse = Mathf.Clamp(_yMouse, -85, 85);
 
-            if (_gamePlayer.frozen){
+            if (_gamePlayer.frozen || _gamePlayer.stun){
                 _xKeyboard = 0;
                 _xKeyboardRaw = 0;
                 _yKeyboard = 0;

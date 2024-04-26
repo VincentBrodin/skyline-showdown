@@ -57,6 +57,9 @@ namespace Code.Players.GameModes{
         [ClientRpc]
         private void ClientSetKnockBack(int player, float force, Vector3 direction){
             if (!isLocalPlayer) return;
+
+            _gamePlayer.Stun();
+            
             if (_gamePlayer.gameMode == GameMode.KingOfTheHill){
                 knockBackMultiplier *= 1.25f;
                 hits += 1;

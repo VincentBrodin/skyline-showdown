@@ -1,5 +1,4 @@
-﻿using System;
-using Code.Interface;
+﻿using Code.Interface;
 using Code.Managers;
 using Code.Networking;
 using Code.Tools;
@@ -16,26 +15,33 @@ namespace Code.Players{
         [SyncVar] public int playerId;
         [SyncVar] public string playerName;
         [SyncVar] public bool frozen;
+        [SyncVar] public bool stun;
         [SyncVar] public int score;
         public TextMeshPro nameTag;
         public bool firstTimeInLobby = true;
+
         [SyncVar(hook = nameof(GameModeChanged))]
         public GameMode gameMode = GameMode.None;
-        [Space]
-        [SerializeField] private int personalLayer;
+
+        [Space] [SerializeField] private int personalLayer;
 
         [SerializeField] private SkinnedMeshRenderer[] meshRenderers;
         private Rigidbody _rb;
         private Transform _transform;
         private float _nameTagUpdate;
+        private Movement _movement;
 
         private CustomNetworkManager _manager;
+
         private CustomNetworkManager Manager(){
             if (_manager == null)
                 _manager = NetworkManager.singleton as CustomNetworkManager;
 
             return _manager;
         }
+
+        private bool _canUnStun;
+
 
         private void Start(){
             _rb = GetComponent<Rigidbody>();
@@ -51,12 +57,13 @@ namespace Code.Players{
 
                 //Reset cursor
                 CursorManager.Singleton.ResetHide();
-                
+
                 gameObject.SetLayer(personalLayer, true);
 
                 foreach (SkinnedMeshRenderer meshRenderer in meshRenderers){
                     meshRenderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
                 }
+
                 nameTag.gameObject.SetActive(false);
             }
 
@@ -66,7 +73,12 @@ namespace Code.Players{
         }
 
         private void FixedUpdate(){
-            if(_nameTagUpdate > Time.time) return;
+            if (_movement.grounded && _canUnStun && stun){
+                stun = false;
+                _canUnStun = false;
+            }
+
+            if (_nameTagUpdate > Time.time) return;
             _nameTagUpdate = Time.time + 1f;
             nameTag.text = playerName;
         }
@@ -85,10 +97,11 @@ namespace Code.Players{
 
         public void Kick(){
             if (isLocalPlayer){
-                if(ViewerManager.Singleton)
+                if (ViewerManager.Singleton)
                     DestroyImmediate(ViewerManager.Singleton.gameObject);
             }
-            if(GetComponent<CameraController>() && GetComponent<CameraController>().cameraHolder)
+
+            if (GetComponent<CameraController>() && GetComponent<CameraController>().cameraHolder)
                 DestroyImmediate(GetComponent<CameraController>().cameraHolder.gameObject);
         }
 
@@ -109,6 +122,29 @@ namespace Code.Players{
             _rb.position = teleportTo;
             _transform.position = teleportTo;
         }
+
+        public void Stun(){
+            ServerStun();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void ServerStun(){
+            stun = true;
+            ClientStun();
+        }
+
+        [ClientRpc]
+        private void ClientStun(){
+            if (!isLocalPlayer) return;
+            stun = true;
+            _canUnStun = false;
+            Invoke(nameof(UnStun), .25f);
+        }
+
+        private void UnStun(){
+            _canUnStun = true;
+        }
+
 
         public void Freeze(){
             ServerFreeze();
@@ -164,6 +200,7 @@ namespace Code.Players{
             }
             else
                 score += scoreToGive;
+
             ScoreUi.Singleton.UpdateScore(scoreToGive, prompt);
         }
 
@@ -182,9 +219,8 @@ namespace Code.Players{
 
         [ClientRpc]
         private void ClientSetNameTagVisibility(bool newValue){
-            if(isLocalPlayer) return;
+            if (isLocalPlayer) return;
             nameTag.gameObject.SetActive(newValue);
         }
-       
     }
 }
