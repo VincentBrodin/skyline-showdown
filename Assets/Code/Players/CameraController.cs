@@ -51,8 +51,8 @@ namespace Code.Players{
             if (_movement.grounded){
                 Vector3 velocity = _movement.orientation.InverseTransformDirection(_rb.velocity);
 
-                float xPercent = (Mathf.Abs(velocity.x) / _movement.BaseMoveSpeed) * horizontalStrength;
-                float yPercent = (Mathf.Abs(velocity.z) / _movement.BaseMoveSpeed) * verticalStrength;
+                float xPercent = (Mathf.Abs(velocity.x) / _movement.CurrentMaxMoveSpeed) * horizontalStrength;
+                float yPercent = (Mathf.Abs(velocity.z) / _movement.CurrentMaxMoveSpeed) * verticalStrength;
                 float percent = Mathf.Max(xPercent, yPercent);
 
                 _headBobTimer += Time.deltaTime * headBobSpeed;

@@ -1000,6 +1000,8 @@ MonoBehaviour:
   playerId: 0
   playerName: 
   frozen: 0
+  stun: 0
+  gameActive: 0
   score: 0
   nameTag: {fileID: 4759644479486849917}
   firstTimeInLobby: 1
@@ -1037,10 +1039,12 @@ MonoBehaviour:
   maxSlideSpeed: 200
   crouchSpeed: 35
   counterMovementForce: 10
+  airCounterMove: 2.94
+  airSpeed: 25
+  stunSpeed: 10
   jumpForce: 9
   jumpCooldown: 0.2
   mimicGroundAngle: 0.25
-  airControll: 0.25
   slideTime: 1.25
   crouchTransitionSpeed: 10
   targetCrouchHeight: 0.75

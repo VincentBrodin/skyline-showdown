@@ -10,34 +10,41 @@ namespace Code.Players{
         public bool sliding;
         public bool crouching;
         public bool isOnSlope;
-        [Header("General Settings")] 
-        public LayerMask groundLayers = 0;
+        [Header("General Settings")] public LayerMask groundLayers = 0;
         public float minSlopeAngle = 15f;
         public float maxSlopeAngle = 45f;
         public bool canSlide;
-        [Header("Movement Settings")] 
-        public float walkSpeed = 70f;
+        [Header("Movement Settings")] public float walkSpeed = 70f;
         public float slideSpeed = 125;
         public float maxSlideSpeed;
         public float crouchSpeed = 30f;
         public float counterMovementForce = 10f;
+        public float airCounterMove = 1f;
+        public float airSpeed = 17f;
+        public float stunSpeed = 5f;
         [Space] public float jumpForce;
         public float jumpCooldown;
         [Range(0, 1)] public float mimicGroundAngle;
-        [Space, Range(0, 1)] public float airControll;
         private bool _startedWalking;
-        public float BaseMoveSpeed => CurrentMoveSpeed / counterMovementForce;
+        public float CurrentMaxMoveSpeed => CurrentMoveSpeed / CurrentCounterForce;
 
-        private float CurrentMoveSpeed {
+        private float CurrentMoveSpeed{
             get{
-                if (!grounded) return walkSpeed;
-                if (sliding ) return (isOnSlope && _rb.velocity.y < 0) ? SlopeSpeed() : walkSpeed;
+                if (_gamePlayer.stun) return stunSpeed;
+                if (!grounded) return airSpeed;
+                if (sliding) return (isOnSlope && _rb.velocity.y < 0) ? SlopeSpeed() : walkSpeed;
                 return crouching ? crouchSpeed : walkSpeed;
             }
         }
 
-        [Header("Crouch Settings")] 
-        public float slideTime;
+        private float CurrentCounterForce{
+            get{
+                if (_gamePlayer.stun) return airCounterMove;
+                return !grounded ? airCounterMove : counterMovementForce;
+            }
+        }
+
+        [Header("Crouch Settings")] public float slideTime;
         public float crouchTransitionSpeed = 10;
         public float targetCrouchHeight;
 
@@ -66,23 +73,23 @@ namespace Code.Players{
         private Rigidbody _rb;
         private GamePlayer _gamePlayer;
         private CameraController _cameraController;
-        
+
         private float _xMouse, _yMouse;
         private float _xKeyboard, _xKeyboardRaw, _yKeyboard, _yKeyboardRaw;
         private bool _cancelingGrounded, _canJump;
-        
+
         private Vector3 _groundNormal;
         private float _angle;
-        
+
         private float _lastGrounded;
-        
+
         private float _goalCrouchHeight, _currentCrouchHeight;
         private Vector3 _colliderSize;
-        
+
         private float _slideTimer;
         private float _timeSinceSlopeStarted;
         private bool _slideTimerStarted;
-        
+
         private void OnGUI(){
             Rect position = new Rect{
                 center = new Vector2(Screen.width / 2f, 0),
@@ -91,7 +98,7 @@ namespace Code.Players{
             };
             Vector3 velocity = _rb.velocity;
             velocity.y = 0;
-            GUI.Label(position, $"{Mathf.Round(velocity.magnitude * 10)/10}");
+            GUI.Label(position, $"{Mathf.Round(velocity.magnitude * 10) / 10}");
         }
 
         private void Start(){
@@ -170,17 +177,16 @@ namespace Code.Players{
             }
         }
 
-        
 
         private void FixedUpdate(){
             if (!isLocalPlayer) return;
 
             Move();
             CalculateAnimation();
-            
+
             Vector3 velocity = _rb.velocity;
             velocity.y = 0;
-            if (sliding && velocity.magnitude < BaseMoveSpeed / 2){
+            if (sliding && velocity.magnitude < CurrentMaxMoveSpeed / 2){
                 sliding = false;
             }
 
@@ -213,18 +219,19 @@ namespace Code.Players{
             else
                 _rb.useGravity = !isOnSlope;
 
-            _currentCrouchHeight = Mathf.Lerp(_currentCrouchHeight, _goalCrouchHeight, crouchTransitionSpeed * Time.deltaTime);
+            _currentCrouchHeight = Mathf.Lerp(_currentCrouchHeight, _goalCrouchHeight,
+                crouchTransitionSpeed * Time.deltaTime);
             _colliderSize.y = _currentCrouchHeight;
             colliderTransform.localScale = _colliderSize;
 
             if (sliding && !_slideTimerStarted){
                 _timeSinceSlopeStarted += Time.deltaTime;
-            } 
+            }
         }
 
         private void CalculateAnimation(){
             //Convert global velocity to local relative to the players orientation
-            Vector3 velocity = orientation.InverseTransformDirection(_rb.velocity / BaseMoveSpeed);
+            Vector3 velocity = orientation.InverseTransformDirection(_rb.velocity / CurrentMaxMoveSpeed);
             velocity.y = 0;
             animator.SetFloat("X", velocity.x);
             animator.SetFloat("Y", velocity.z);
@@ -263,9 +270,8 @@ namespace Code.Players{
                     _rb.AddForce(Vector3.down * 45, ForceMode.Acceleration);
                     break;
             }
-          
-            float currentAirControll = grounded ? 1 : airControll;
-            Vector3 walkForce = GetDesiredDirection() * (CurrentMoveSpeed * currentAirControll);
+
+            Vector3 walkForce = GetDesiredDirection() * CurrentMoveSpeed;
             _rb.AddForce(walkForce, ForceMode.Acceleration);
 
             CounterMovement();
@@ -292,44 +298,53 @@ namespace Code.Players{
 
 
         private void CounterMovement(){
-            //General countermovement.
             Vector3 velocity = _rb.velocity;
             velocity.y = 0;
+            if (grounded){
+                velocity *= -1;
+                velocity = Vector3.ProjectOnPlane(velocity, _groundNormal);
+                Vector3 force = velocity * counterMovementForce;
 
-            if (!grounded) velocity = AdjustToAirControll(velocity);
+                _rb.AddForce(force, ForceMode.Acceleration);
+            }
+            else{
+                velocity = AdjustToAir(velocity);
+                velocity = Vector3.ClampMagnitude(velocity, CurrentMoveSpeed);
+                velocity *= -1;
+                Vector3 force = velocity * airCounterMove;
 
-            velocity *= -1;
-            velocity = Vector3.ProjectOnPlane(velocity, _groundNormal);
-
-
-            float currentAirControll = grounded ? 1 : airControll;
-
-            Vector3 force = velocity * (counterMovementForce * currentAirControll);
-
-            if (!grounded)
-                force = Vector3.ClampMagnitude(force, CurrentMoveSpeed * currentAirControll);
-
-            _rb.AddForce(force, ForceMode.Acceleration);
-
-            //Harder stops if velocity is low to stop sliping.
-            if (velocity.magnitude < 1f && grounded && !_startedWalking){
-                _rb.AddForce(velocity * (counterMovementForce * 2), ForceMode.Acceleration);
+                _rb.AddForce(force, ForceMode.Acceleration);
             }
         }
 
-        private Vector3 AdjustToAirControll(Vector3 velocity){
+        private Vector3 AdjustToAir(Vector3 velocity){
             //Stops player from getting friction in the air if no input is given.
             Vector3 adjustedVelocity = orientation.InverseTransformDirection(velocity);
-            if (_xKeyboardRaw == 0) adjustedVelocity.x = 0;
-            if (_yKeyboardRaw == 0) adjustedVelocity.z = 0;
-
+            if (_xKeyboardRaw == 0) adjustedVelocity.x = 0.15f;
+            if (_yKeyboardRaw == 0) adjustedVelocity.z = 0.15f;
 
             return orientation.TransformDirection(adjustedVelocity);
         }
 
         private Vector3 GetDesiredDirection(){
+            //Mimic keyboard input to not mess up interpolation
+            float x = _xKeyboard;
+            float y = _yKeyboard;
+            Vector3 localVelocity = orientation.InverseTransformDirection(_rb.velocity);
+            localVelocity.y = 0;
+            float magnitude = localVelocity.magnitude;
+
+            if (_xKeyboardRaw > 0 && localVelocity.x > CurrentMaxMoveSpeed) x = 0;
+            if (_xKeyboardRaw < 0 && localVelocity.x < -CurrentMaxMoveSpeed) x = 0;
+            if (_yKeyboardRaw > 0 && localVelocity.z > CurrentMaxMoveSpeed) y = 0;
+            if (_yKeyboardRaw < 0 && localVelocity.z < -CurrentMaxMoveSpeed) y = 0;
+            if (magnitude > CurrentMaxMoveSpeed){
+                x = 0;
+                y = 0;
+            }
+
             //Gets the desired direction of the player by adding together inputs and look direction
-            Vector3 direction = orientation.forward * _yKeyboard + orientation.right * _xKeyboard;
+            Vector3 direction = orientation.forward * y + orientation.right * x;
             direction = Vector3.ClampMagnitude(direction, 1);
             direction = Vector3.ProjectOnPlane(direction, _groundNormal);
 
@@ -347,7 +362,7 @@ namespace Code.Players{
 
             _yMouse = Mathf.Clamp(_yMouse, -85, 85);
 
-            if (_gamePlayer.frozen || _gamePlayer.stun){
+            if (_gamePlayer.frozen){
                 _xKeyboard = 0;
                 _xKeyboardRaw = 0;
                 _yKeyboard = 0;
@@ -388,10 +403,11 @@ namespace Code.Players{
                 crouching = true;
                 Vector3 velocity = _rb.velocity;
                 velocity.y = 0;
-                if (velocity.magnitude > BaseMoveSpeed / 2 && canSlide){
+                if (velocity.magnitude > CurrentMaxMoveSpeed / 2 && canSlide){
                     sliding = true;
                     _timeSinceSlopeStarted = 0;
                 }
+
                 _goalCrouchHeight = targetCrouchHeight;
                 _gamePlayer.SetNameTagVisibility(false);
             }
@@ -431,7 +447,7 @@ namespace Code.Players{
         }
 
         private void OnCollisionStay(Collision other){
-            if(!isLocalPlayer) return;
+            if (!isLocalPlayer) return;
             //Make sure we are only checking for walkable layers
             int layer = other.gameObject.layer;
             if (groundLayers != (groundLayers | (1 << layer))) return;
@@ -445,6 +461,7 @@ namespace Code.Players{
                 if (!grounded && _lastGrounded < Time.time - jumpCooldown){
                     _cameraController.SetPitch(15);
                 }
+
                 grounded = true;
                 _cancelingGrounded = false;
                 _groundNormal = normal;
