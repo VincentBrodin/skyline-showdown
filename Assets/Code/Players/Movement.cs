@@ -307,21 +307,21 @@ namespace Code.Players{
 
                 _rb.AddForce(force, ForceMode.Acceleration);
             }
-            else{
-                velocity = AdjustToAir(velocity);
-                velocity = Vector3.ClampMagnitude(velocity, CurrentMoveSpeed);
-                velocity *= -1;
-                Vector3 force = velocity * airCounterMove;
-
-                _rb.AddForce(force, ForceMode.Acceleration);
-            }
+            //else{
+            //    velocity = AdjustToAir(velocity);
+            //    velocity = Vector3.ClampMagnitude(velocity, CurrentMoveSpeed);
+            //    velocity *= -1;
+            //    Vector3 force = velocity * airCounterMove;
+            //
+            //    _rb.AddForce(force, ForceMode.Acceleration);
+            //}
         }
 
         private Vector3 AdjustToAir(Vector3 velocity){
             //Stops player from getting friction in the air if no input is given.
             Vector3 adjustedVelocity = orientation.InverseTransformDirection(velocity);
-            if (_xKeyboardRaw == 0) adjustedVelocity.x = 0.15f;
-            if (_yKeyboardRaw == 0) adjustedVelocity.z = 0.15f;
+            if (_xKeyboardRaw == 0) adjustedVelocity.x = 0f;
+            if (_yKeyboardRaw == 0) adjustedVelocity.z = 0f;
 
             return orientation.TransformDirection(adjustedVelocity);
         }
@@ -338,7 +338,7 @@ namespace Code.Players{
             if (_xKeyboardRaw < 0 && localVelocity.x < -CurrentMaxMoveSpeed) x = 0;
             if (_yKeyboardRaw > 0 && localVelocity.z > CurrentMaxMoveSpeed) y = 0;
             if (_yKeyboardRaw < 0 && localVelocity.z < -CurrentMaxMoveSpeed) y = 0;
-            if (magnitude > CurrentMaxMoveSpeed){
+            if (magnitude > CurrentMaxMoveSpeed && grounded){
                 x = 0;
                 y = 0;
             }

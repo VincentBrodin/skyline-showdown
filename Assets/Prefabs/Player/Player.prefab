@@ -1039,9 +1039,9 @@ MonoBehaviour:
   maxSlideSpeed: 200
   crouchSpeed: 35
   counterMovementForce: 10
-  airCounterMove: 2.94
-  airSpeed: 25
-  stunSpeed: 10
+  airCounterMove: 1.5
+  airSpeed: 12.5
+  stunSpeed: 5
   jumpForce: 9
   jumpCooldown: 0.2
   mimicGroundAngle: 0.25

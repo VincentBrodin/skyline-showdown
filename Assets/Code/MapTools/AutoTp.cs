@@ -10,6 +10,8 @@ namespace Code.MapTools{
         public bool losePointsOnTp;
         public int amount = -25;
         public string prompt = "OPPS";
+        public bool playAudioOnTp;
+        public new NetworkAudio audio;
 
         private CustomNetworkManager _manager;
 
@@ -28,6 +30,12 @@ namespace Code.MapTools{
 
             gamePlayer.Teleport(SpawnPoints.Singleton.spawnPoints[gamePlayer.playerId].position);
             gamePlayer.GetComponent<KnockBack>().SetMultiplier(1);
+
+
+            if (playAudioOnTp && !audio.audioSource.isPlaying){
+                Debug.Log("Play audio");
+                audio.Play();
+            }
 
             if (losePointsOnTp){
                 gamePlayer.GiveScore(amount, prompt);
