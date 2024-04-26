@@ -1039,7 +1039,7 @@ MonoBehaviour:
   jumpForce: 9
   jumpCooldown: 0.2
   mimicGroundAngle: 0.25
-  airControll: 0.5
+  airControll: 0.25
   slideTime: 1.25
   crouchTransitionSpeed: 10
   targetCrouchHeight: 0.75
@@ -1239,7 +1239,7 @@ MonoBehaviour:
   sendRate: 60
   networkChannel: 1
   childObjectToSync: {fileID: 0}
-  setVelocityInsteadOfPositionOnNonOwners: 1
+  setVelocityInsteadOfPositionOnNonOwners: 0
   maxPositionDifferenceForVelocitySyncing: 0.5
   useLocalTransformOnly: 0
   ownerChangeIndicator: 1

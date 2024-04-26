@@ -43,7 +43,7 @@ namespace Code.Players{
 
             if (isLocalPlayer){
                 //Update player values
-                playerName = $"Nerd {playerId}";
+                playerName = PlayerPrefs.GetString("Name");
                 Manager().localPlayer = this;
 
                 //Set random spawn point
@@ -104,7 +104,6 @@ namespace Code.Players{
         [ClientRpc]
         private void ClientTeleport(Vector3 teleportTo){
             Debug.Log($"Teleporting {playerName} from {_rb.position} to {teleportTo}");
-            if (!isLocalPlayer) return;
             _rb.velocity = Vector3.zero;
             _rb.angularVelocity = Vector3.zero;
             _rb.position = teleportTo;

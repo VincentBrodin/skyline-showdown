@@ -22,6 +22,7 @@ namespace Code.Interface{
         public Button backFromHostButton;
         public TMP_InputField ipAddress;
         public TMP_InputField port;
+        public TMP_InputField nameInput;
 
         [Header("Error")] public GameObject errorScreen;
         public Button closeError;
@@ -40,6 +41,15 @@ namespace Code.Interface{
             optionButton.onClick.AddListener(SettingsMenu.Singleton.Show);
             quitButton.onClick.AddListener(Quit);
 
+            if (!PlayerPrefs.HasKey("Name")){
+                PlayerPrefs.SetString("Name", "Nerd");
+            }
+            else{
+                nameInput.text = PlayerPrefs.GetString("Name");
+            }
+            
+            nameInput.onValueChanged.AddListener(NameValueChanged);
+
             hostGameButton.onClick.AddListener(HostGame);
             joinLanGameButton.onClick.AddListener(JoinLanGame);
             backFromHostButton.onClick.AddListener(CloseHost);
@@ -54,6 +64,10 @@ namespace Code.Interface{
 
             ipAddress.text = Manager().networkAddress;
             port.text = $"{Manager().GetComponent<KcpTransport>().port}";
+        }
+
+        private void NameValueChanged(string newValue){
+            PlayerPrefs.SetString("Name", newValue);
         }
 
         private void CloseError(){
