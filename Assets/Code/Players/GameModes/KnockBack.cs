@@ -1,4 +1,5 @@
 ﻿using Code.Interface;
+using Code.Managers;
 using Code.Networking;
 using Code.Tools;
 using Mirror;
@@ -35,7 +36,7 @@ namespace Code.Players.GameModes{
         }
 
         private void OnHit(Punch.HitData hitData){
-            if (_gamePlayer.gameMode == GameMode.KingOfTheHill)
+            if (_gamePlayer.gameMode == GameMode.KingOfTheHill && _gamePlayer.gameActive)
                 _gamePlayer.GiveScore(10, "HIT PLAYER");
 
             SetKnockBack(hitData.VictimId, knockBackForce, hitData.Direction);
@@ -60,7 +61,7 @@ namespace Code.Players.GameModes{
 
             _gamePlayer.Stun();
             
-            if (_gamePlayer.gameMode == GameMode.KingOfTheHill){
+            if (_gamePlayer.gameMode == GameMode.KingOfTheHill && _gamePlayer.gameActive){
                 knockBackMultiplier *= 1.25f;
                 hits += 1;
                 Warning.Singleton.Set((float)hits/maxWarningHits);

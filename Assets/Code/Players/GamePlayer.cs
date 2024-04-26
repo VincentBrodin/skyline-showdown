@@ -16,6 +16,7 @@ namespace Code.Players{
         [SyncVar] public string playerName;
         [SyncVar] public bool frozen;
         [SyncVar] public bool stun;
+        [SyncVar] public bool gameActive;
         [SyncVar] public int score;
         public TextMeshPro nameTag;
         public bool firstTimeInLobby = true;
@@ -46,6 +47,7 @@ namespace Code.Players{
         private void Start(){
             _rb = GetComponent<Rigidbody>();
             _transform = transform;
+            _movement = GetComponent<Movement>();
 
             if (isLocalPlayer){
                 //Update player values
@@ -73,7 +75,7 @@ namespace Code.Players{
         }
 
         private void FixedUpdate(){
-            if (_movement.grounded && _canUnStun && stun){
+            if (isLocalPlayer && _movement.grounded && _canUnStun && stun){
                 stun = false;
                 _canUnStun = false;
             }
@@ -221,6 +223,22 @@ namespace Code.Players{
         private void ClientSetNameTagVisibility(bool newValue){
             if (isLocalPlayer) return;
             nameTag.gameObject.SetActive(newValue);
+        }
+
+        public void SetGameActive(bool newValue){
+            ServerSetGameActive(newValue);
+        }
+        
+        [Command(requiresAuthority = false)]
+        private void ServerSetGameActive(bool newValue){
+            gameActive = newValue;
+            ClientSetGameActive(newValue);
+        }
+
+        [ClientRpc]
+        private void ClientSetGameActive(bool newValue){
+            if (!isLocalPlayer) return;
+            gameActive = newValue;
         }
     }
 }

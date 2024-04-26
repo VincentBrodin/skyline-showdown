@@ -1,4 +1,5 @@
 ﻿using Code.Interface;
+using Code.Managers;
 using Code.Networking;
 using Code.Tools;
 using Mirror;
@@ -28,6 +29,7 @@ namespace Code.Players.GameModes{
 
 
         private void OnHit(Punch.HitData hitData){
+            if(!_gamePlayer.gameActive) return;
             if (_gamePlayer.gameMode != GameMode.Tag && _gamePlayer.gameMode != GameMode.HideAndSeek) return;
             if (!tagged) return;
             TagPlayer(hitData.VictimId);

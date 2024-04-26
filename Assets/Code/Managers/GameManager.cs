@@ -12,6 +12,7 @@ using Random = UnityEngine.Random;
 
 namespace Code.Managers{
     public class GameManager : NetworkBehaviour{
+
         public List<GameSetting> gameSettings = new();
         [SyncVar]public GameMode gameMode;
         private bool _ready, _gameStarted;
@@ -35,8 +36,8 @@ namespace Code.Managers{
             public bool respawn = true;
             public int lives = -1;
         }
-
         
+
 
         private void Start(){
             ScreenCover.Singleton.FadeOut();
@@ -78,12 +79,19 @@ namespace Code.Managers{
             SetUpGameMode();
             Invoke(nameof(FreezePlayers), currentGameSetting.gameTime);
             Invoke(nameof(PrepairSceneSwitch), currentGameSetting.gameTime + 1f);
+
+            foreach (GamePlayer gamePlayer in Manager().Players){
+                gamePlayer.SetGameActive(true);
+            }
         }
 
         private void PrepairSceneSwitch(){
             if(!isServer) return;
             ClientScreenCover();
             UnTagPlayers();
+            foreach (GamePlayer player in Manager().Players){
+                player.SetGameActive(false);
+            }
             Invoke(nameof(SwitchScene), 1.5f);
         }
 
@@ -106,7 +114,6 @@ namespace Code.Managers{
                 case GameMode.KingOfTheHill:
                     SetUpKingOfTheHill();
                     break;
-                    
             }
         }
         

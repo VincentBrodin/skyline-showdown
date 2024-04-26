@@ -2532,8 +2532,8 @@ MonoBehaviour:
     image: {fileID: 21300000, guid: e8a2f9b6982a0c949a703676021873eb, type: 3}
     transform: {fileID: 0}
   selectedName: {fileID: 1486568513}
-  nextInteractive: {fileID: 1888102691}
-  lastInteractive: {fileID: 1716597807}
+  nextInteractive: {fileID: 1716597807}
+  lastInteractive: {fileID: 1888102691}
   imagePrefab: {fileID: 4363435139882903018, guid: 89f5482965b2b5c4db9098cc4d706449,
     type: 3}
   screenParent: {fileID: 1175844744}
@@ -5742,8 +5742,8 @@ MonoBehaviour:
     image: {fileID: 21300000, guid: e8a2f9b6982a0c949a703676021873eb, type: 3}
     transform: {fileID: 0}
   selectedName: {fileID: 964160182}
-  nextInteractive: {fileID: 1450634391}
-  lastInteractive: {fileID: 1430253421}
+  nextInteractive: {fileID: 1430253421}
+  lastInteractive: {fileID: 1450634391}
   imagePrefab: {fileID: 4363435139882903018, guid: 89f5482965b2b5c4db9098cc4d706449,
     type: 3}
   screenParent: {fileID: 262381797}
