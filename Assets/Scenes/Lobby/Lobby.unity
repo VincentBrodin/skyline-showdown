@@ -9059,6 +9059,8 @@ MonoBehaviour:
   losePointsOnTp: 0
   amount: -25
   prompt: OPPS
+  playAudioOnTp: 0
+  audio: {fileID: 0}
 --- !u!65 &1088160488
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10498,6 +10500,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7228553453802367758, guid: 19c95378ab2301446be7082bdec4ee72,
+        type: 3}
+      propertyPath: sceneId
+      value: 631047099
       objectReference: {fileID: 0}
     - target: {fileID: 7787305283466608819, guid: 19c95378ab2301446be7082bdec4ee72,
         type: 3}

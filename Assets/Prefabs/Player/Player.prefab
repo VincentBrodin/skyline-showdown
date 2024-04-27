@@ -1006,6 +1006,7 @@ MonoBehaviour:
   nameTag: {fileID: 4759644479486849917}
   stunTime: 0.5
   firstTimeInLobby: 1
+  outline: {fileID: 6444686408273689975}
   gameMode: 0
   personalLayer: 7
   meshRenderers:
