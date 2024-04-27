@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Code.Networking;
+using Code.Tools;
 using Mirror;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace Code.MapTools{
     public class SpawnPoints : MonoBehaviour{
         public List<Transform> spawnPoints;
         public bool validate;
+        public bool shuffle;
         public static SpawnPoints Singleton{ get; private set; }
         private bool _ready;
 
@@ -29,17 +31,28 @@ namespace Code.MapTools{
         }
 
         private void FixedUpdate(){
-            if (_ready || NetworkServer.isLoadingScene || NetworkClient.isLoadingScene || !Manager().localPlayer) return;
+            if (_ready || NetworkServer.isLoadingScene || NetworkClient.isLoadingScene ||
+                !Manager().localPlayer) return;
             _ready = true;
             Manager().localPlayer.Teleport(spawnPoints[Manager().localPlayer.playerId].position);
         }
 
 
         protected void OnValidate(){
-            for (int i = 0; i < transform.childCount; i++){
-                if(!spawnPoints.Contains(transform.GetChild(i))) spawnPoints.Add(transform.GetChild(i));
+            if (shuffle){
+                shuffle = false;
+                spawnPoints.Shuffle();
+                for (int i = 0; i < spawnPoints.Count; i++){
+                    Transform spawnPoint = spawnPoints[i];
+                    spawnPoint.name = $"Spawn Point: {i}";
+                    spawnPoint.SetSiblingIndex(i);
+                }
             }
-            
+
+            for (int i = 0; i < transform.childCount; i++){
+                if (!spawnPoints.Contains(transform.GetChild(i))) spawnPoints.Add(transform.GetChild(i));
+            }
+
             for (int i = 0; i < spawnPoints.Count; i++){
                 Transform spawnPointA = spawnPoints[i];
                 for (int j = 0; j < spawnPoints.Count; j++){
@@ -56,11 +69,10 @@ namespace Code.MapTools{
             }
 
             for (int i = 0; i < spawnPoints.Count; i++){
-                spawnPoints[i].name = $"Spawn Point: {i}";
-                spawnPoints[i].SetSiblingIndex(i);
+                Transform spawnPoint = spawnPoints[i];
+                spawnPoint.name = $"Spawn Point: {i}";
+                spawnPoint.SetSiblingIndex(i);
             }
-            
-           
         }
 
         private void OnDrawGizmos(){

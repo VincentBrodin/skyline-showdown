@@ -15,9 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Lobby/Lobby.unity
     guid: bf46c93988652564db786eb687ca0a72
   - enabled: 1
-    path: Assets/Scenes/Maps/Demo.unity
-    guid: cac120bcc132614478defbc810ebfb4f
-  - enabled: 1
     path: Assets/Scenes/Maps/Roof_Top/Roof_Top.unity
     guid: be063f03b168ecb419b772beed76ed53
+  - enabled: 1
+    path: Assets/Scenes/Maps/Skyline/Skyline.unity
+    guid: efd9eee72dc6fc54daae2b0ba3b3cc9e
   m_configObjects: {}

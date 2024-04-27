@@ -3075,6 +3075,21 @@ MonoBehaviour:
   currentSelected: 0
   animationSpeed: 10
   options:
+  - optionName: SKYLINE
+    id: Skyline
+    icon: {fileID: 21300000, guid: 9b1c90a36f63218429d74ec3112e2d44, type: 3}
+    image: {fileID: 21300000, guid: e8a2f9b6982a0c949a703676021873eb, type: 3}
+    transform: {fileID: 0}
+  - optionName: ROOF TOP
+    id: Roof_Top
+    icon: {fileID: 21300000, guid: 0645b554dd90d4c429c7c0af03bbadd5, type: 3}
+    image: {fileID: 21300000, guid: e8a2f9b6982a0c949a703676021873eb, type: 3}
+    transform: {fileID: 0}
+  - optionName: SKYLINE
+    id: Skyline
+    icon: {fileID: 21300000, guid: 9b1c90a36f63218429d74ec3112e2d44, type: 3}
+    image: {fileID: 21300000, guid: e8a2f9b6982a0c949a703676021873eb, type: 3}
+    transform: {fileID: 0}
   - optionName: ROOF TOP
     id: Roof_Top
     icon: {fileID: 21300000, guid: 0645b554dd90d4c429c7c0af03bbadd5, type: 3}
@@ -5501,6 +5516,7 @@ MonoBehaviour:
   - {fileID: 1917870902}
   - {fileID: 74559244}
   validate: 0
+  shuffle: 0
 --- !u!1 &641313986
 GameObject:
   m_ObjectHideFlags: 0

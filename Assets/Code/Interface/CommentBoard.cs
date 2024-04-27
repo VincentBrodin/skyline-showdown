@@ -11,7 +11,6 @@ namespace Code.Interface{
         public Transform commentParent;
         public RectTransform scrollArea;
         private readonly List<Comment> _comments = new();
-        private int _totalCommentsCount;
         private float _goalHeight;
         private float _currentHeight;
         private float _baseHeight;
@@ -37,8 +36,12 @@ namespace Code.Interface{
             newComment.user.text = user;
             newComment.message.text = message;
             _comments.Add(newComment);
-            _totalCommentsCount++;
-            if (_totalCommentsCount > 4){
+            if (_comments.Count > 10){
+                Comment c = _comments[0];
+                Destroy(c.gameObject);
+                _comments.RemoveAt(0);
+            }
+            if (_comments.Count > 4){
                 _goalHeight += newComment.GetComponent<RectTransform>().sizeDelta.y + 0.125f;
             }
         }
