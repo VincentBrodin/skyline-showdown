@@ -1,4 +1,5 @@
-﻿using Code.Networking;
+﻿using System;
+using Code.Networking;
 using Code.Players;
 using Code.Players.GameModes;
 using Code.Tools;
@@ -6,12 +7,16 @@ using Mirror;
 using UnityEngine;
 
 namespace Code.MapTools{
-    public class AutoTp : MonoBehaviour{
+    public class AutoTp : NetworkBehaviour{
         public bool losePointsOnTp;
         public int amount = -25;
         public string prompt = "OPPS";
         public bool playAudioOnTp;
         public new NetworkAudio audio;
+        [Space] public bool playParticles;
+        public new ParticleSystem particleSystem;
+
+        private Transform _particleSystem;
 
         private CustomNetworkManager _manager;
 
@@ -22,20 +27,27 @@ namespace Code.MapTools{
             return _manager;
         }
 
+        private void Start(){
+            if(particleSystem != null)
+                _particleSystem = particleSystem.transform;
+        }
+
 
         private void OnCollisionEnter(Collision other){
             if (!other.collider.transform.parent) return;
             if (!other.collider.transform.parent.TryGetComponent(out GamePlayer gamePlayer)) return;
             if (!gamePlayer.isLocalPlayer) return;
+            
+            if (playAudioOnTp && !audio.audioSource.isPlaying){
+                audio.Play();
+            }
+
+            if (playParticles){
+                PlayParticles(gamePlayer.Position());
+            }
 
             gamePlayer.Teleport(SpawnPoints.Singleton.spawnPoints[gamePlayer.playerId].position);
             gamePlayer.GetComponent<KnockBack>().SetMultiplier(1);
-
-
-            if (playAudioOnTp && !audio.audioSource.isPlaying){
-                Debug.Log("Play audio");
-                audio.Play();
-            }
 
             if (losePointsOnTp){
                 gamePlayer.GiveScore(amount, prompt);
@@ -51,6 +63,22 @@ namespace Code.MapTools{
                     gamePlayer.GetComponent<Punch>().lastGotHitBy = -1;
                 }
             }
+            
+        }
+
+        private void PlayParticles(Vector3 atPosition){
+            ServerPlayParticles(atPosition);
+        }
+
+        [Command(requiresAuthority = false)]
+        private void ServerPlayParticles(Vector3 atPosition){
+            ClientPlayParticles(atPosition);
+        }
+
+        [ClientRpc]
+        private void ClientPlayParticles(Vector3 atPosition){
+            _particleSystem.position = atPosition;
+            particleSystem.Play();
         }
     }
 }
