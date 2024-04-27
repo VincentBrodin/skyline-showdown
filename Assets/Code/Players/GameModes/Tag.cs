@@ -45,6 +45,7 @@ namespace Code.Players.GameModes{
             _gamePlayer.GiveScore(10, "TAGGED PLAYER:");
             if (_gamePlayer.gameMode == GameMode.Tag){
                 tagged = false;
+                _gamePlayer.SetOutlineVisibility(tagged);
                 TaggedUi.Singleton.Hide();
             }
             
@@ -65,6 +66,7 @@ namespace Code.Players.GameModes{
             if (!isLocalPlayer) return;
             TaggedUi.Singleton.Show();
             tagged = true;
+            _gamePlayer.SetOutlineVisibility(tagged);
             _gamePlayer.GiveScore(-10, "GOT TAGGED:");
         }
 
@@ -81,6 +83,7 @@ namespace Code.Players.GameModes{
         private void ClientSetTagged(bool newValue){
             if (!isLocalPlayer) return;
             tagged = newValue;
+            _gamePlayer.SetOutlineVisibility(tagged);
 
             if (newValue)
                 TaggedUi.Singleton.Show();

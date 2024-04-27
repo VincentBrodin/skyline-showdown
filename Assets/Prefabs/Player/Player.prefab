@@ -4354,6 +4354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4741816342425219424}
   - component: {fileID: 10719850299625254}
+  - component: {fileID: 6444686408273689975}
   m_Layer: 0
   m_Name: body
   m_TagString: Untagged
@@ -4483,6 +4484,24 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.0027039647, y: -0.049868762, z: 0.06700021}
     m_Extent: {x: 1.003494, y: 0.93578404, z: 0.3444927}
   m_DirtyAABB: 0
+--- !u!114 &6444686408273689975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5942757383537573789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 0, b: 0, a: 1}
+  outlineWidth: 5
+  precomputeOutline: 1
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &5973066629484958650
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,6 +21,7 @@ namespace Code.Players{
         public TextMeshPro nameTag;
         public float stunTime;
         public bool firstTimeInLobby = true;
+        public Outline outline;
 
         [SyncVar(hook = nameof(GameModeChanged))]
         public GameMode gameMode = GameMode.None;
@@ -46,6 +47,7 @@ namespace Code.Players{
             _rb = GetComponent<Rigidbody>();
             _transform = transform;
             _movement = GetComponent<Movement>();
+            outline.enabled = false;
 
             if (isLocalPlayer){
                 //Update player values
@@ -234,6 +236,21 @@ namespace Code.Players{
         private void ClientSetGameActive(bool newValue){
             if (!isLocalPlayer) return;
             gameActive = newValue;
+        }
+        
+        public void SetOutlineVisibility(bool newValue){
+            ClientSetOutlineVisibility(newValue);
+        }
+
+        [Command(requiresAuthority = false)]
+        private void ServerSetOutlineVisibility(bool newValue){
+            ClientSetOutlineVisibility(newValue);
+        }
+
+        [ClientRpc]
+        private void ClientSetOutlineVisibility(bool newValue){
+            if (isLocalPlayer) return;
+            outline.enabled = false;
         }
     }
 }

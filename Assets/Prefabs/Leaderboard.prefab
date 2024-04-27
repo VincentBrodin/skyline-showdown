@@ -304,7 +304,7 @@ MonoBehaviour:
   - gameObject: {fileID: 9074864248284289762}
     playerNameText: {fileID: 6109636338558536911}
     playerScoreText: {fileID: 8162666448817716040}
-  updateSpeed: 1
+  updateSpeed: 0.25
 --- !u!1 &1103999874013043518
 GameObject:
   m_ObjectHideFlags: 0
