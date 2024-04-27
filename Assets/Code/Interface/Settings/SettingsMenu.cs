@@ -30,14 +30,13 @@ namespace Code.Interface.Settings{
             DontDestroyOnLoad(gameObject);
             LoadSettings();
         }
-        
+
 
         private void Start(){
             closeButton.onClick.AddListener(Hide);
             clearSettings.onClick.AddListener(ClearSettings);
             Hide();
             blocker.SetActive(false);
-            QualitySettings.SetQualityLevel(2);
         }
 
         public void Show(){
@@ -58,7 +57,6 @@ namespace Code.Interface.Settings{
         }
 
         public void LoadSettings(){
-            
             LoadingSettings.Invoke();
             //FPS
             if (PlayerPrefs.HasKey("max_fps")){
@@ -67,6 +65,15 @@ namespace Code.Interface.Settings{
             else{
                 Application.targetFrameRate = 120;
                 PlayerPrefs.SetFloat("max_fps", 120);
+            }
+
+            //FPS
+            if (PlayerPrefs.HasKey("game_quality")){
+                QualitySettings.SetQualityLevel(PlayerPrefs.GetInt("game_quality"));
+            }
+            else{
+                PlayerPrefs.SetInt("game_quality", 2);
+                QualitySettings.SetQualityLevel(2);
             }
 
             //Vsync
@@ -88,7 +95,7 @@ namespace Code.Interface.Settings{
                 PlayerPrefs.SetInt("fullscreen", 0);
                 Screen.fullScreen = false;
             }
-            
+
             //Shadows
             if (PlayerPrefs.HasKey("shadows")){
                 QualitySettings.shadows = (ShadowQuality)PlayerPrefs.GetInt("shadows");
@@ -97,7 +104,7 @@ namespace Code.Interface.Settings{
                 QualitySettings.shadows = ShadowQuality.All;
                 PlayerPrefs.SetInt("shadows", 2);
             }
-            
+
             //Shadows
             if (PlayerPrefs.HasKey("shadow_quality")){
                 QualitySettings.shadowResolution = (ShadowResolution)PlayerPrefs.GetInt("shadow_quality");
@@ -152,47 +159,47 @@ namespace Code.Interface.Settings{
                 audioMixer.SetFloat("sfx_volume", value);
                 PlayerPrefs.SetFloat("sfx_volume", 100);
             }
-            
+
             if (!PlayerPrefs.HasKey("forward")){
                 PlayerPrefs.SetInt("forward", (int)KeyCode.W);
             }
-            
+
             if (!PlayerPrefs.HasKey("left")){
                 PlayerPrefs.SetInt("left", (int)KeyCode.A);
             }
-            
+
             if (!PlayerPrefs.HasKey("right")){
                 PlayerPrefs.SetInt("right", (int)KeyCode.D);
             }
-            
+
             if (!PlayerPrefs.HasKey("back")){
                 PlayerPrefs.SetInt("back", (int)KeyCode.S);
             }
-            
+
             if (!PlayerPrefs.HasKey("jump")){
                 PlayerPrefs.SetInt("jump", (int)KeyCode.Space);
             }
-            
+
             if (!PlayerPrefs.HasKey("jump")){
                 PlayerPrefs.SetInt("jump", (int)KeyCode.LeftControl);
             }
-            
+
             if (!PlayerPrefs.HasKey("interactive")){
                 PlayerPrefs.SetInt("interactive", (int)KeyCode.E);
             }
-            
+
             if (!PlayerPrefs.HasKey("render_grass")){
                 PlayerPrefs.SetInt("render_grass", 1);
             }
-            
+
             if (!PlayerPrefs.HasKey("head_bob")){
                 PlayerPrefs.SetFloat("head_bob", 1);
             }
-            
+
             if (!PlayerPrefs.HasKey("head_pitch")){
                 PlayerPrefs.SetFloat("head_pitch", 1);
             }
-            
+
             if (!PlayerPrefs.HasKey("warning_blink")){
                 PlayerPrefs.SetInt("warning_blink", 1);
             }
