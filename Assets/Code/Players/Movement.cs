@@ -16,42 +16,28 @@ namespace Code.Players{
         public bool canSlide;
         [Header("Movement Settings")] public float walkSpeed = 70f;
         public float crouchSpeed = 30f;
-        [Space]
-        public float slideSpeed = 125;
+        [Range(0, 1)] public float airControll;
+        [Space] public float slideSpeed = 125;
         public float maxSlideSpeed;
-        [Space]
-        public float counterMovementForce = 10f;
-        public float airCounterMove = 1f;
-        [Space]
-        public float airSpeed = 17f;
-        public float stunSpeed = 5f;
+        [Space] public float counterMovementForce = 10f;
         [Space] public float jumpForce;
         public float jumpCooldown;
         public float jumpQueLife;
         [Range(0, 1)] public float mimicGroundAngle;
-        private bool _startedWalking;
-        public float CurrentMaxMoveSpeed => CurrentMoveSpeed / CurrentCounterForce;
+        public float CurrentMaxMoveSpeed => CurrentMoveSpeed / counterMovementForce;
 
         private float CurrentMoveSpeed{
             get{
-                if (_gamePlayer.stun) return stunSpeed;
-                if (!grounded) return airSpeed;
-                if (sliding) return (isOnSlope && _rb.velocity.y < 0) ? SlopeSpeed() : walkSpeed;
-                return crouching ? crouchSpeed : walkSpeed;
+                if (sliding) return (isOnSlope && _rb.velocity.y < 0) ? SlopeSpeed() * CurrentAirControll : walkSpeed * CurrentAirControll;
+                return crouching ? crouchSpeed * CurrentAirControll : walkSpeed * CurrentAirControll;
             }
         }
 
-        private float CurrentCounterForce{
-            get{
-                if (_gamePlayer.stun) return airCounterMove;
-                return !grounded ? airCounterMove : counterMovementForce;
-            }
-        }
+        private float CurrentAirControll => grounded ? 1 : airControll;
 
         [Header("Crouch Settings")] public float slideTime;
         public float crouchTransitionSpeed = 10;
         public float targetCrouchHeight;
-
 
         [Header("Keyboard Settings")] public KeyCode forward = KeyCode.W;
         public KeyCode back = KeyCode.S;
@@ -295,9 +281,9 @@ namespace Code.Players{
         private void Jump(){
             //Makes it so the player can only jump on the ground
             if (CursorManager.Singleton.WindowsOpend) return;
-            if(!Input.GetKeyDown(jump) && !_queJump) return;
+            if (!Input.GetKeyDown(jump) && !_queJump) return;
             if (!_canJump) return;
-            if(!grounded) return;
+            if (!grounded) return;
 
             Vector3 velocity = _rb.velocity;
             velocity.y = 0;
@@ -306,13 +292,13 @@ namespace Code.Players{
             _rb.AddForce(jumpNormal * jumpForce, ForceMode.VelocityChange);
 
             _groundNormal = Vector3.up;
-            
+
             _canJump = false;
             Invoke(nameof(ResetJump), jumpCooldown);
-            
+
             _queJump = false;
             CancelInvoke(nameof(ResetJumpQue));
-            
+
             _cameraController.SetPitch(-25);
         }
 
@@ -331,19 +317,19 @@ namespace Code.Players{
 
                 _rb.AddForce(force, ForceMode.Acceleration);
             }
-            //else{
-            //    velocity = AdjustToAir(velocity);
-            //    velocity = Vector3.ClampMagnitude(velocity, CurrentMoveSpeed);
-            //    velocity *= -1;
-            //    Vector3 force = velocity * airCounterMove;
-            //
-            //    _rb.AddForce(force, ForceMode.Acceleration);
-            //}
+            else{
+                velocity = AdjustToAir(velocity);
+                velocity *= -1;
+                Vector3 force = velocity * (counterMovementForce * airControll);
+                force = Vector3.ClampMagnitude(force, CurrentMoveSpeed);
+                _rb.AddForce(force, ForceMode.Acceleration);
+            }
         }
 
         private Vector3 AdjustToAir(Vector3 velocity){
             //Stops player from getting friction in the air if no input is given.
             Vector3 adjustedVelocity = orientation.InverseTransformDirection(velocity);
+
             if (_xKeyboardRaw == 0) adjustedVelocity.x = 0f;
             if (_yKeyboardRaw == 0) adjustedVelocity.z = 0f;
 
@@ -351,24 +337,8 @@ namespace Code.Players{
         }
 
         private Vector3 GetDesiredDirection(){
-            //Mimic keyboard input to not mess up interpolation
-            float x = _xKeyboard;
-            float y = _yKeyboard;
-            Vector3 localVelocity = orientation.InverseTransformDirection(_rb.velocity);
-            localVelocity.y = 0;
-            float magnitude = localVelocity.magnitude;
-
-            if (_xKeyboardRaw > 0 && localVelocity.x > CurrentMaxMoveSpeed) x = 0;
-            if (_xKeyboardRaw < 0 && localVelocity.x < -CurrentMaxMoveSpeed) x = 0;
-            if (_yKeyboardRaw > 0 && localVelocity.z > CurrentMaxMoveSpeed) y = 0;
-            if (_yKeyboardRaw < 0 && localVelocity.z < -CurrentMaxMoveSpeed) y = 0;
-            if (magnitude > CurrentMaxMoveSpeed && grounded){
-                x = 0;
-                y = 0;
-            }
-
             //Gets the desired direction of the player by adding together inputs and look direction
-            Vector3 direction = orientation.forward * y + orientation.right * x;
+            Vector3 direction = orientation.forward * _yKeyboard + orientation.right * _xKeyboard;
             direction = Vector3.ClampMagnitude(direction, 1);
             direction = Vector3.ProjectOnPlane(direction, _groundNormal);
 
@@ -386,7 +356,7 @@ namespace Code.Players{
 
             _yMouse = Mathf.Clamp(_yMouse, -85, 85);
 
-            if (_gamePlayer.frozen){
+            if (_gamePlayer.frozen || _gamePlayer.stun){
                 _xKeyboard = 0;
                 _xKeyboardRaw = 0;
                 _yKeyboard = 0;
@@ -420,8 +390,7 @@ namespace Code.Players{
                 _xKeyboard = _xKeyboardRaw;
                 _yKeyboard = _yKeyboardRaw;
             }
-
-            _startedWalking = _xKeyboardRaw != 0 || _yKeyboardRaw != 0;
+            
 
             if (grounded && Input.GetKey(crouch) && !crouching){
                 crouching = true;

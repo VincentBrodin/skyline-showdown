@@ -1004,6 +1004,7 @@ MonoBehaviour:
   gameActive: 0
   score: 0
   nameTag: {fileID: 4759644479486849917}
+  stunTime: 0.5
   firstTimeInLobby: 1
   gameMode: 0
   personalLayer: 7
@@ -1036,12 +1037,10 @@ MonoBehaviour:
   canSlide: 0
   walkSpeed: 85
   crouchSpeed: 35
+  airControll: 0.25
   slideSpeed: 125
   maxSlideSpeed: 200
   counterMovementForce: 10
-  airCounterMove: 1.5
-  airSpeed: 12.5
-  stunSpeed: 5
   jumpForce: 9
   jumpCooldown: 0.2
   jumpQueLife: 0.2

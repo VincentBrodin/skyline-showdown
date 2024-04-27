@@ -19,6 +19,7 @@ namespace Code.Players{
         [SyncVar] public bool gameActive;
         [SyncVar] public int score;
         public TextMeshPro nameTag;
+        public float stunTime;
         public bool firstTimeInLobby = true;
 
         [SyncVar(hook = nameof(GameModeChanged))]
@@ -40,10 +41,7 @@ namespace Code.Players{
 
             return _manager;
         }
-
-        private bool _canUnStun;
-
-
+        
         private void Start(){
             _rb = GetComponent<Rigidbody>();
             _transform = transform;
@@ -75,11 +73,7 @@ namespace Code.Players{
         }
 
         private void FixedUpdate(){
-            if (isLocalPlayer && _movement.grounded && _canUnStun && stun){
-                stun = false;
-                _canUnStun = false;
-            }
-
+            
             if (_nameTagUpdate > Time.time) return;
             _nameTagUpdate = Time.time + 1f;
             nameTag.text = playerName;
@@ -139,12 +133,13 @@ namespace Code.Players{
         private void ClientStun(){
             if (!isLocalPlayer) return;
             stun = true;
-            _canUnStun = false;
-            Invoke(nameof(UnStun), .25f);
+            CancelInvoke(nameof(UnStun));
+            Invoke(nameof(UnStun), stunTime);
+
         }
 
         private void UnStun(){
-            _canUnStun = true;
+            stun = false;
         }
 
 

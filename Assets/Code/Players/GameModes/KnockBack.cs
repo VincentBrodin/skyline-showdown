@@ -59,7 +59,6 @@ namespace Code.Players.GameModes{
         private void ClientSetKnockBack(int player, float force, Vector3 direction){
             if (!isLocalPlayer) return;
 
-            _gamePlayer.Stun();
             
             if (_gamePlayer.gameMode == GameMode.KingOfTheHill && _gamePlayer.gameActive){
                 knockBackMultiplier *= 1.25f;
@@ -67,6 +66,7 @@ namespace Code.Players.GameModes{
                 Warning.Singleton.Set((float)hits/maxWarningHits);
                 _rb.AddForce((direction * force + Vector3.up * 10) * knockBackMultiplier, ForceMode.VelocityChange);
                 _gamePlayer.GiveScore(-5, $"GOT HIT");
+                _gamePlayer.Stun();
             }
             else{
                 _rb.AddForce(direction * force + Vector3.up * 10, ForceMode.VelocityChange);
