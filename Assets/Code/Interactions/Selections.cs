@@ -15,7 +15,7 @@ namespace Code.Interactions{
         public Interactive lastInteractive;
         [Space] public Image imagePrefab;
         public Transform screenParent;
-
+        
         private int _last;
         private int _next;
         private int _current;
@@ -27,6 +27,7 @@ namespace Code.Interactions{
             public string optionName;
             public string id;
             public Sprite icon;
+            [TextArea] public string metaData;
             [HideInInspector] public Image image;
             [HideInInspector] public Transform transform;
         }

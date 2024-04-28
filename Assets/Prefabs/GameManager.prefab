@@ -51,25 +51,14 @@ MonoBehaviour:
   gameSettings:
   - gameMode: 1
     countdownPrompt: TAG!!!
-    gameTime: 300
-    respawn: 1
-    lives: -1
   - gameMode: 2
     countdownPrompt: HIDE!! OR SEEK!
-    gameTime: 300
-    respawn: 1
-    lives: -1
   - gameMode: 3
     countdownPrompt: 
-    gameTime: 300
-    respawn: 1
-    lives: 5
   - gameMode: 4
     countdownPrompt: DON'T GET HIT!!
-    gameTime: 300
-    respawn: 1
-    lives: -1
   gameMode: 0
+  gameTime: 180
 --- !u!114 &4808813525494777112
 MonoBehaviour:
   m_ObjectHideFlags: 0

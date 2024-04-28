@@ -15,6 +15,7 @@ namespace Code.Managers{
 
         public List<GameSetting> gameSettings = new();
         [SyncVar]public GameMode gameMode;
+        public int gameTime;
         private bool _ready, _gameStarted;
         private float _counter;
         private CustomNetworkManager _manager;
@@ -29,12 +30,7 @@ namespace Code.Managers{
         [Serializable]
         public class GameSetting{
             public GameMode gameMode = GameMode.None;
-            [Space]
             public string countdownPrompt;
-            public float gameTime = 90f;
-            [Space]
-            public bool respawn = true;
-            public int lives = -1;
         }
         
 
@@ -75,10 +71,10 @@ namespace Code.Managers{
             _gameStarted = true;
             gameMode = Manager().localPlayer.gameMode;
             GameSetting currentGameSetting = gameSettings.FirstOrDefault(gameSetting => gameSetting.gameMode == gameMode);
-            Countdown.Singleton.StartCountdown(currentGameSetting.gameTime, currentGameSetting.countdownPrompt);
+            Countdown.Singleton.StartCountdown(gameTime, currentGameSetting.countdownPrompt);
             SetUpGameMode();
-            Invoke(nameof(FreezePlayers), currentGameSetting.gameTime);
-            Invoke(nameof(PrepairSceneSwitch), currentGameSetting.gameTime + 1f);
+            Invoke(nameof(FreezePlayers), gameTime);
+            Invoke(nameof(PrepairSceneSwitch), gameTime + 1f);
 
             foreach (GamePlayer gamePlayer in Manager().Players){
                 gamePlayer.SetGameActive(true);
