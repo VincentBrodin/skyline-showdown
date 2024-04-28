@@ -31,6 +31,10 @@ namespace Code.Players{
 
         private void FixedUpdate(){
             if(!isLocalPlayer) return;
+
+            if (_lastInteractive){
+                InteractionPrompt.Singleton.Show(interactionKey, _lastInteractive.Prompt);
+            }
             
             bool rayHit = Physics.Raycast(worldCamera.position, worldCamera.forward, out _rayHitInfo, range, interactionLayers);
 
@@ -56,7 +60,6 @@ namespace Code.Players{
                 _lastInteractive.StopLooking();
             _lastInteractive = interactive;
             _lastInteractive.LookAt();
-            InteractionPrompt.Singleton.Show(interactionKey, _lastInteractive.Prompt);
         }
 
         private void Update(){

@@ -51,22 +51,22 @@ MonoBehaviour:
   gameSettings:
   - gameMode: 1
     countdownPrompt: TAG!!!
-    gameTime: 90
+    gameTime: 300
     respawn: 1
     lives: -1
   - gameMode: 2
     countdownPrompt: HIDE!! OR SEEK!
-    gameTime: 90
+    gameTime: 300
     respawn: 1
     lives: -1
   - gameMode: 3
     countdownPrompt: 
-    gameTime: 90
+    gameTime: 300
     respawn: 1
     lives: 5
   - gameMode: 4
     countdownPrompt: DON'T GET HIT!!
-    gameTime: 90
+    gameTime: 300
     respawn: 1
     lives: -1
   gameMode: 0

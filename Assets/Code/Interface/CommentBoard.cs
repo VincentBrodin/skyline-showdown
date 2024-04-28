@@ -40,6 +40,7 @@ namespace Code.Interface{
                 Comment c = _comments[0];
                 Destroy(c.gameObject);
                 _comments.RemoveAt(0);
+                _currentHeight -= newComment.GetComponent<RectTransform>().sizeDelta.y + 0.125f;
             }
             if (_comments.Count > 4){
                 _goalHeight += newComment.GetComponent<RectTransform>().sizeDelta.y + 0.125f;

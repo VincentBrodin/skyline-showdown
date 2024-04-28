@@ -39,6 +39,14 @@ namespace Code.Interactions{
         private void CmdSetActive(bool newValue){
             active = newValue;
         }
-        
+
+        public void SetPrompt(string newPrompt, bool changeActivePrompt = true){
+            if (changeActivePrompt){
+                activePrompt = newPrompt;
+            }
+            else{
+                inactivePrompt = newPrompt;
+            }
+        }
     }
 }

@@ -202,6 +202,21 @@ namespace Code.Players{
 
             ScoreUi.Singleton.UpdateScore(scoreToGive, prompt);
         }
+        
+        public void SetScore(int scoreToSet){
+            ServerSetScore(scoreToSet);
+        }
+        
+        [Command(requiresAuthority = false)]
+        private void ServerSetScore(int scoreToSet){
+            ClientSetScore(scoreToSet);
+        }
+        
+        [ClientRpc]
+        private void ClientSetScore(int scoreToSet){
+            if (!isLocalPlayer) return;
+            score = scoreToSet;
+        }
 
         public Vector3 Position(){
             return _transform.position;
@@ -252,5 +267,7 @@ namespace Code.Players{
             if (isLocalPlayer) return;
             outline.enabled = false;
         }
+
+      
     }
 }
