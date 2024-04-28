@@ -5,6 +5,7 @@ using Code.Players.GameModes;
 using Code.Tools;
 using Mirror;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Code.MapTools{
     public class AutoTp : NetworkBehaviour{
@@ -14,9 +15,11 @@ namespace Code.MapTools{
         public bool playAudioOnTp;
         public new NetworkAudio audio;
         [Space] public bool playParticles;
-        public new ParticleSystem particleSystem;
+        public ParticleSystem dieParticles;
+        public ParticleSystem spawnParticles;
+        private Transform _spawnParticles;
 
-        private Transform _particleSystem;
+        private Transform _dieParticle;
 
         private CustomNetworkManager _manager;
 
@@ -28,8 +31,11 @@ namespace Code.MapTools{
         }
 
         private void Start(){
-            if(particleSystem != null)
-                _particleSystem = particleSystem.transform;
+            if (dieParticles != null)
+                _dieParticle = dieParticles.transform;
+
+            if (spawnParticles != null)
+                _spawnParticles = spawnParticles.transform;
         }
 
 
@@ -37,16 +43,18 @@ namespace Code.MapTools{
             if (!other.collider.transform.parent) return;
             if (!other.collider.transform.parent.TryGetComponent(out GamePlayer gamePlayer)) return;
             if (!gamePlayer.isLocalPlayer) return;
-            
+
             if (playAudioOnTp && !audio.audioSource.isPlaying){
                 audio.Play();
             }
 
+            Vector3 newPosition = SpawnPoints.Singleton.spawnPoints[gamePlayer.playerId].position;
+
             if (playParticles){
-                PlayParticles(gamePlayer.Position());
+                PlayParticles(gamePlayer.Position(), newPosition);
             }
 
-            gamePlayer.Teleport(SpawnPoints.Singleton.spawnPoints[gamePlayer.playerId].position);
+            gamePlayer.Teleport(newPosition);
             gamePlayer.GetComponent<KnockBack>().SetMultiplier(1);
 
             if (losePointsOnTp){
@@ -63,22 +71,24 @@ namespace Code.MapTools{
                     gamePlayer.GetComponent<Punch>().lastGotHitBy = -1;
                 }
             }
-            
         }
 
-        private void PlayParticles(Vector3 atPosition){
-            ServerPlayParticles(atPosition);
+        private void PlayParticles(Vector3 atPosition, Vector3 toPosition){
+            ServerPlayParticles(atPosition, toPosition);
         }
 
         [Command(requiresAuthority = false)]
-        private void ServerPlayParticles(Vector3 atPosition){
-            ClientPlayParticles(atPosition);
+        private void ServerPlayParticles(Vector3 atPosition, Vector3 toPosition){
+            ClientPlayParticles(atPosition, toPosition);
         }
 
         [ClientRpc]
-        private void ClientPlayParticles(Vector3 atPosition){
-            _particleSystem.position = atPosition;
-            particleSystem.Play();
+        private void ClientPlayParticles(Vector3 atPosition, Vector3 toPosition){
+            _dieParticle.position = atPosition;
+            dieParticles.Play();
+
+            _spawnParticles.position = toPosition;
+            spawnParticles.Play();
         }
     }
 }

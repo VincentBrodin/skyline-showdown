@@ -64,7 +64,7 @@ namespace Code.Players.GameModes{
                 knockBackMultiplier *= 1.25f;
                 hits += 1;
                 Warning.Singleton.Set((float)hits/maxWarningHits);
-                _rb.AddForce((direction * force + Vector3.up * 10) * knockBackMultiplier, ForceMode.VelocityChange);
+                _rb.AddForce((direction * force + Vector3.up * 5) * knockBackMultiplier, ForceMode.VelocityChange);
                 _gamePlayer.GiveScore(-5, $"GOT HIT");
                 _gamePlayer.Stun();
             }
