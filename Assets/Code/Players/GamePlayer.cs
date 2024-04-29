@@ -42,7 +42,7 @@ namespace Code.Players{
 
             return _manager;
         }
-        
+
         private void Start(){
             _rb = GetComponent<Rigidbody>();
             _transform = transform;
@@ -75,7 +75,6 @@ namespace Code.Players{
         }
 
         private void FixedUpdate(){
-            
             if (_nameTagUpdate > Time.time) return;
             _nameTagUpdate = Time.time + 1f;
             nameTag.text = playerName;
@@ -137,7 +136,6 @@ namespace Code.Players{
             stun = true;
             CancelInvoke(nameof(UnStun));
             Invoke(nameof(UnStun), stunTime);
-
         }
 
         private void UnStun(){
@@ -202,16 +200,16 @@ namespace Code.Players{
 
             ScoreUi.Singleton.UpdateScore(scoreToGive, prompt);
         }
-        
+
         public void SetScore(int scoreToSet){
             ServerSetScore(scoreToSet);
         }
-        
+
         [Command(requiresAuthority = false)]
         private void ServerSetScore(int scoreToSet){
             ClientSetScore(scoreToSet);
         }
-        
+
         [ClientRpc]
         private void ClientSetScore(int scoreToSet){
             if (!isLocalPlayer) return;
@@ -240,7 +238,7 @@ namespace Code.Players{
         public void SetGameActive(bool newValue){
             ServerSetGameActive(newValue);
         }
-        
+
         [Command(requiresAuthority = false)]
         private void ServerSetGameActive(bool newValue){
             gameActive = newValue;
@@ -252,7 +250,7 @@ namespace Code.Players{
             if (!isLocalPlayer) return;
             gameActive = newValue;
         }
-        
+
         public void SetOutlineVisibility(bool newValue){
             ClientSetOutlineVisibility(newValue);
         }
@@ -268,6 +266,36 @@ namespace Code.Players{
             outline.enabled = false;
         }
 
-      
+
+        public void AddForce(Vector3 force, ForceMode forceMode){
+            ServerAddForce(force, forceMode);
+        }
+
+        [Command(requiresAuthority = false)]
+        private void ServerAddForce(Vector3 force, ForceMode forceMode){
+            ClientAddForce(force, forceMode);
+        }
+
+        [ClientRpc]
+        private void ClientAddForce(Vector3 force, ForceMode forceMode){
+            if (!isLocalPlayer) return;
+            _rb.AddForce(force, forceMode);
+        }
+
+        public void ResetFall(){
+            ServerResetFall();
+        }
+        
+        [Command(requiresAuthority = false)]
+        private void ServerResetFall(){
+            ClientResetFall();
+        }
+        
+        [ClientRpc]
+        private void ClientResetFall(){
+            Vector3 velocity = _rb.velocity;
+            velocity.y = 0;
+            _rb.velocity = velocity;
+        }
     }
 }
