@@ -3019,7 +3019,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 330002984}
-  - component: {fileID: 330002983}
+  - component: {fileID: 330002985}
   - component: {fileID: 330002982}
   m_Layer: 0
   m_Name: Item Screen
@@ -3045,54 +3045,6 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
---- !u!114 &330002983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330002981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ea86f94991f482fb8336add05b5b37a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  currentSelected: 0
-  animationSpeed: 10
-  options:
-  - optionName: PLAYER GRABBER
-    id: 
-    icon: {fileID: 21300000, guid: de2b672d2b1bfa240bbe468ac00f5f8d, type: 3}
-    metaData: 
-    image: {fileID: 21300000, guid: de2b672d2b1bfa240bbe468ac00f5f8d, type: 3}
-    transform: {fileID: 0}
-  - optionName: DASH
-    id: 
-    icon: {fileID: 21300000, guid: edf3c3ac17671c34fa8e00a4784b6114, type: 3}
-    metaData: 
-    image: {fileID: 21300000, guid: edf3c3ac17671c34fa8e00a4784b6114, type: 3}
-    transform: {fileID: 0}
-  - optionName: LAND MINE
-    id: 
-    icon: {fileID: 21300000, guid: e8a2f9b6982a0c949a703676021873eb, type: 3}
-    metaData: 
-    image: {fileID: 21300000, guid: e8a2f9b6982a0c949a703676021873eb, type: 3}
-    transform: {fileID: 0}
-  - optionName: SHIELD
-    id: 
-    icon: {fileID: 21300000, guid: efa95dcebc278d64eb9a3ceca07d7fa3, type: 3}
-    metaData: 
-    image: {fileID: 21300000, guid: e8a2f9b6982a0c949a703676021873eb, type: 3}
-    transform: {fileID: 0}
-  selectedName: {fileID: 1462841414}
-  nextInteractive: {fileID: 595707418}
-  lastInteractive: {fileID: 1034524822}
-  imagePrefab: {fileID: 4363435139882903018, guid: 89f5482965b2b5c4db9098cc4d706449,
-    type: 3}
-  screenParent: {fileID: 160008749}
 --- !u!4 &330002984
 Transform:
   m_ObjectHideFlags: 0
@@ -3113,6 +3065,54 @@ Transform:
   - {fileID: 781535183}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 135, z: 0}
+--- !u!114 &330002985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330002981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47e19e8d97d54b5e92f96c54e9f805b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  currentSelected: 0
+  animationSpeed: 10
+  options:
+  - optionName: Land Mine - 250
+    id: Land Mine
+    icon: {fileID: 21300000, guid: de2b672d2b1bfa240bbe468ac00f5f8d, type: 3}
+    price: 250
+    image: {fileID: 0}
+    transform: {fileID: 0}
+  - optionName: Dash -250
+    id: Dash
+    icon: {fileID: 21300000, guid: edf3c3ac17671c34fa8e00a4784b6114, type: 3}
+    price: 250
+    image: {fileID: 0}
+    transform: {fileID: 0}
+  - optionName: Player Grabber - 250
+    id: Player Grabber
+    icon: {fileID: 21300000, guid: e8a2f9b6982a0c949a703676021873eb, type: 3}
+    price: 250
+    image: {fileID: 0}
+    transform: {fileID: 0}
+  - optionName: Shield - 250
+    id: Shield
+    icon: {fileID: 21300000, guid: efa95dcebc278d64eb9a3ceca07d7fa3, type: 3}
+    price: 250
+    image: {fileID: 0}
+    transform: {fileID: 0}
+  selectedName: {fileID: 1462841414}
+  nextInteractive: {fileID: 595707418}
+  lastInteractive: {fileID: 1034524822}
+  imagePrefab: {fileID: 4363435139882903018, guid: 89f5482965b2b5c4db9098cc4d706449,
+    type: 3}
+  screenParent: {fileID: 160008749}
 --- !u!1001 &331905297
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3662,6 +3662,7 @@ GameObject:
   - component: {fileID: 407374332}
   - component: {fileID: 407374331}
   - component: {fileID: 407374330}
+  - component: {fileID: 407374339}
   m_Layer: 0
   m_Name: Buy Item
   m_TagString: Untagged
@@ -3902,6 +3903,23 @@ Transform:
   - {fileID: 846382249}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 135, z: 0}
+--- !u!114 &407374339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407374329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c39ed8670af14ed0bb0f4e0d4fbbd901, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactive: {fileID: 1966629473}
+  buyScreen: {fileID: 330002985}
+  meshRenderer: {fileID: 1966629475}
+  canBuyMat: {fileID: 2100000, guid: cd2482d18830552478d13af2d4e6fc08, type: 2}
+  canNotButMat: {fileID: 2100000, guid: 6edff18aa6b331b4d87023720d74195c, type: 2}
 --- !u!1 &414401285
 GameObject:
   m_ObjectHideFlags: 0
@@ -27473,10 +27491,65 @@ PrefabInstance:
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1408563565241059617, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1633576638317068988, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1633576638317068988, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1633576638317068988, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1633576638317068988, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1633576638317068988, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3006794996576633694, guid: c6aeaa827b0358945b3d311e47d30190,
         type: 3}
       propertyPath: m_Name
       value: Hud
+      objectReference: {fileID: 0}
+    - target: {fileID: 5037525635585679084, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5037525635585679084, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5037525635585679084, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5037525635585679084, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5037525635585679084, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5045548463687117684, guid: c6aeaa827b0358945b3d311e47d30190,
         type: 3}
@@ -27576,6 +27649,71 @@ PrefabInstance:
     - target: {fileID: 5045548463687117684, guid: c6aeaa827b0358945b3d311e47d30190,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6784088428868034161, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7007652226802315416, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7767504623848950382, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8366546714324530730, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8366546714324530730, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8366546714324530730, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8366546714324530730, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8366546714324530730, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963183737937518143, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963183737937518143, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963183737937518143, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963183737937518143, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8963183737937518143, guid: c6aeaa827b0358945b3d311e47d30190,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

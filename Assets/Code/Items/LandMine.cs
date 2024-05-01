@@ -4,8 +4,9 @@ using Mirror;
 using UnityEngine;
 
 namespace Code.Items{
-    public class LandMine : NetworkBehaviour{
+    public class LandMine : Item{
         [SyncVar] public bool rotating;
+        [SyncVar] public bool exploded;
 
         [Header("Explosion settings")] public float radius;
         public float explosionForce;
@@ -39,6 +40,7 @@ namespace Code.Items{
             collider.enabled = true;
         }
 
+        [Server]
         private void LockIn(Vector3 position, Vector3 normal){
             ClientLockIn();
             rotating = false;
@@ -77,8 +79,10 @@ namespace Code.Items{
             }
         }
 
+        [Server]
         public void Explode(){
             ClientExplode();
+            exploded = true;
             foreach (GamePlayer player in Manager().Players){
                 Vector3 playerPosition = player.Position() + new Vector3(0, 1, 0);
                 Vector3 direction = playerPosition - _transform.position;
@@ -106,6 +110,7 @@ namespace Code.Items{
             Invoke(nameof(Kill), 4f);
         }
 
+        [Server]
         private void Kill(){
             NetworkServer.Destroy(gameObject);
         }
