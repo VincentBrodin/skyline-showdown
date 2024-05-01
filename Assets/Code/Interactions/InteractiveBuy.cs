@@ -39,7 +39,7 @@ namespace Code.Interactions{
 
         private void FixedUpdate(){
             BuyScreen.Option currentOption = buyScreen.options[buyScreen.currentSelected];
-            bool hasScore = currentOption.price < Manager().localPlayer.score;
+            bool hasScore = currentOption.price <= Manager().localPlayer.score;
             if (hasScore && !_canBuy){
                 _canBuy = true;
                 meshRenderer.material = canBuyMat;
@@ -58,13 +58,13 @@ namespace Code.Interactions{
 
         private void Buy(){
             BuyScreen.Option currentOption = buyScreen.options[buyScreen.currentSelected];
-            bool hasScore = currentOption.price < Manager().localPlayer.score;
+            bool hasScore = currentOption.price <= Manager().localPlayer.score;
 
             if (!hasScore) return;
 
             Manager().localPlayer.GetComponent<Inventory>().GiveItem(buyScreen.currentSelected);
             Manager().localPlayer
-                .GiveScore(-currentOption.price, $"Bought {currentOption.id} for {currentOption.price}");
+                .GiveScore(-currentOption.price, $"Bought {currentOption.id}");
         }
 
         private void OnValidate(){

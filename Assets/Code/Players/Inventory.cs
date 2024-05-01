@@ -104,7 +104,7 @@ namespace Code.Players{
 
         public void GiveItem(int index){
             items[index].hasItem = true;
-            items[index].currentUses = items[index].uses;
+            items[index].currentUses += items[index].uses;
         }
 
         [Command(requiresAuthority = false)]
