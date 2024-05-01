@@ -1213,7 +1213,7 @@ MonoBehaviour:
   landMinePrefab: {fileID: 7529573023021922418, guid: 28a32df8e4e341a4884b972b8c60c500,
     type: 3}
   spawnPoint: {fileID: 17855211858166467}
-  landMineThrowDelay: 1
+  landMineThrowDelay: 2.5
 --- !u!114 &2164352572200788795
 MonoBehaviour:
   m_ObjectHideFlags: 0

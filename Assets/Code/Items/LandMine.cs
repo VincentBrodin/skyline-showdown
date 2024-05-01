@@ -97,11 +97,13 @@ namespace Code.Items{
                 percentOfForce = Mathf.Clamp(percentOfForce, 0.5f, 1f);
                 Vector3 force = directionToPlayer * (explosionForce * percentOfForce);
 
-                player.Stun();
+                if (radius / 2 > distanceToPlayer)
+                    player.Stun();
                 player.ResetFall();
                 player.AddForce(force, ForceMode.VelocityChange);
             }
-            Invoke(nameof(Kill), 1.5f);
+
+            Invoke(nameof(Kill), 4f);
         }
 
         private void Kill(){

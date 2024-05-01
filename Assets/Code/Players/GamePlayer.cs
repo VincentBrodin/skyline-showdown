@@ -252,7 +252,7 @@ namespace Code.Players{
         }
 
         public void SetOutlineVisibility(bool newValue){
-            ClientSetOutlineVisibility(newValue);
+            ServerSetOutlineVisibility(newValue);
         }
 
         [Command(requiresAuthority = false)]
