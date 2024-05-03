@@ -42,7 +42,7 @@ namespace Code.Interface{
         }
 
         private void Update(){
-            if (Input.GetKeyDown(KeyCode.Escape) && !SettingsMenu.Singleton.isOpen){
+            if (Input.GetKeyDown(KeyCode.Escape) && !SettingsMenu.Singleton.isOpen && !CustomGameUi.Singleton.isOpen){
                 if (showing){
                     Hide();
                 }

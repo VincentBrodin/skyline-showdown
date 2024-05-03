@@ -26,12 +26,9 @@ namespace Code.Players{
         [Range(0, 1)] public float mimicGroundAngle;
         public float CurrentMaxMoveSpeed => CurrentMoveSpeed / counterMovementForce;
 
-        private float CurrentMoveSpeed{
-            get{
-                if (sliding) return (isOnSlope && _rb.velocity.y < 0) ? SlopeSpeed() * CurrentAirControll : walkSpeed * CurrentAirControll;
-                return crouching ? crouchSpeed * CurrentAirControll : walkSpeed * CurrentAirControll;
-            }
-        }
+        private float CurrentMoveSpeed => crouching
+            ? crouchSpeed * CurrentAirControll * _gamePlayer.metaData.speed
+            : walkSpeed * CurrentAirControll * _gamePlayer.metaData.speed;
 
         private float CurrentAirControll => grounded ? 1 : airControll;
 
@@ -80,6 +77,7 @@ namespace Code.Players{
         private float _timeSinceSlopeStarted;
         private bool _slideTimerStarted;
         private bool _queJump;
+        private bool _useGravity;
 
         private void OnGUI(){
             Rect position = new Rect{
@@ -205,10 +203,10 @@ namespace Code.Players{
             Jump();
 
             if (!_canJump){
-                _rb.useGravity = true;
+                _useGravity = true;
             }
             else
-                _rb.useGravity = !isOnSlope;
+                _useGravity = !isOnSlope;
 
             _currentCrouchHeight = Mathf.Lerp(_currentCrouchHeight, _goalCrouchHeight,
                 crouchTransitionSpeed * Time.deltaTime);
@@ -264,12 +262,16 @@ namespace Code.Players{
             switch (isOnSlope){
                 //Extra gravity
                 case false:
-                    _rb.AddForce(Vector3.down * 15, ForceMode.Acceleration);
+                    _rb.AddForce(Vector3.down * (15 * _gamePlayer.metaData.gravity), ForceMode.Acceleration);
                     break;
                 //If on slope and moving down add force
                 case true when _rb.velocity.y > 0:
-                    _rb.AddForce(Vector3.down * 45, ForceMode.Acceleration);
+                    _rb.AddForce(Vector3.down * (45 * _gamePlayer.metaData.gravity), ForceMode.Acceleration);
                     break;
+            }
+
+            if (_useGravity){
+                _rb.AddForce(Physics.gravity * _gamePlayer.metaData.gravity, ForceMode.Acceleration);
             }
 
             Vector3 walkForce = GetDesiredDirection() * CurrentMoveSpeed;
@@ -390,7 +392,7 @@ namespace Code.Players{
                 _xKeyboard = _xKeyboardRaw;
                 _yKeyboard = _yKeyboardRaw;
             }
-            
+
 
             if (grounded && Input.GetKey(crouch) && !crouching){
                 crouching = true;

@@ -24,17 +24,8 @@ namespace Code.Interactions{
 
         private void Start(){
             interactive.OnInteraction.AddListener(Buy);
-
-            BuyScreen.Option currentOption = buyScreen.options[buyScreen.currentSelected];
-            bool hasScore = currentOption.price < Manager().localPlayer.score;
-            if (hasScore){
-                _canBuy = true;
-                meshRenderer.material = canBuyMat;
-            }
-            else{
-                _canBuy = false;
-                meshRenderer.material = canNotButMat;
-            }
+            _canBuy = true;
+            meshRenderer.material = canBuyMat;
         }
 
         private void FixedUpdate(){

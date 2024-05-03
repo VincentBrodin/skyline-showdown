@@ -13,6 +13,7 @@ namespace Code.Players{
     public class GamePlayer : NetworkBehaviour{
         [SyncVar] public int connectionId;
         [SyncVar] public int playerId;
+        [SyncVar] public bool isHost;
         [SyncVar] public string playerName;
         [SyncVar] public bool frozen;
         [SyncVar] public bool stun;
@@ -23,12 +24,17 @@ namespace Code.Players{
         public bool firstTimeInLobby = true;
         public Outline outline;
 
+
         [SyncVar(hook = nameof(GameModeChanged))]
         public GameMode gameMode = GameMode.None;
 
         [Space] [SerializeField] private int personalLayer;
 
         [SerializeField] private SkinnedMeshRenderer[] meshRenderers;
+
+        public GameSettingsManager.OverloadMetaData metaData;
+        [SyncVar] public string metaDataString;
+
         private Rigidbody _rb;
         private Transform _transform;
         private float _nameTagUpdate;
@@ -67,11 +73,17 @@ namespace Code.Players{
                 }
 
                 nameTag.gameObject.SetActive(false);
+
+                isHost = isServer;
             }
 
             Manager().AddPlayer(this);
 
             DontDestroyOnLoad(gameObject);
+
+            if (isHost && metaDataString != ""){
+                GameSettingsManager.Singleton.SetCustomMeta(metaDataString);
+            }
         }
 
         private void FixedUpdate(){
@@ -192,6 +204,8 @@ namespace Code.Players{
         [ClientRpc]
         private void ClientGiveScore(int scoreToGive, string prompt){
             if (!isLocalPlayer) return;
+            float newScore = scoreToGive * Manager().localPlayer.metaData.score;
+            scoreToGive = (int)newScore;
             if (score + scoreToGive < 0){
                 score = 0;
             }
@@ -285,17 +299,44 @@ namespace Code.Players{
         public void ResetFall(){
             ServerResetFall();
         }
-        
+
         [Command(requiresAuthority = false)]
         private void ServerResetFall(){
             ClientResetFall();
         }
-        
+
         [ClientRpc]
         private void ClientResetFall(){
             Vector3 velocity = _rb.velocity;
             velocity.y = 0;
             _rb.velocity = velocity;
+        }
+
+        public void SyncMetaData(float gameTime, float scoreMult, float knockBackMult, float gravityMult,
+            float speedMult){
+            metaData.gameTime = (int)gameTime;
+            metaData.score = scoreMult;
+            metaData.knockBack = knockBackMult;
+            metaData.gravity = gravityMult;
+            metaData.speed = speedMult;
+
+            string jsonMetaData = JsonUtility.ToJson(metaData);
+            ServerSyncMetaData(jsonMetaData);
+        }
+
+        [Command(requiresAuthority = false)]
+        private void ServerSyncMetaData(string jsonMetaData){
+            foreach (GamePlayer player in Manager().Players){
+                player.ClientSetMetaData(jsonMetaData);
+            }
+        }
+
+        [ClientRpc]
+        private void ClientSetMetaData(string jsonMetaData){
+            GameSettingsManager.Singleton.SetCustomMeta(jsonMetaData);
+            if (isHost){
+                metaDataString = jsonMetaData;
+            }
         }
     }
 }

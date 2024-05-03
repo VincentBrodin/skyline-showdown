@@ -71,7 +71,7 @@ namespace Code.Managers{
             _gameStarted = true;
             gameMode = Manager().localPlayer.gameMode;
             GameSetting currentGameSetting = gameSettings.FirstOrDefault(gameSetting => gameSetting.gameMode == gameMode);
-            Countdown.Singleton.StartCountdown(gameTime, currentGameSetting.countdownPrompt);
+            Countdown.Singleton.StartCountdown(Manager().localPlayer.metaData.gameTime, currentGameSetting.countdownPrompt);
             SetUpGameMode();
             Invoke(nameof(FreezePlayers), gameTime);
             Invoke(nameof(PrepairSceneSwitch), gameTime + 1f);

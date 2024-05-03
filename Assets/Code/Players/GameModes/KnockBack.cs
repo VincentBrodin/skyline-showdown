@@ -59,17 +59,20 @@ namespace Code.Players.GameModes{
         private void ClientSetKnockBack(int player, float force, Vector3 direction){
             if (!isLocalPlayer) return;
 
-            
+
             if (_gamePlayer.gameMode == GameMode.KingOfTheHill && _gamePlayer.gameActive){
                 knockBackMultiplier *= 1.25f;
                 hits += 1;
-                Warning.Singleton.Set((float)hits/maxWarningHits);
-                _rb.AddForce((direction * force + Vector3.up * 5) * knockBackMultiplier, ForceMode.VelocityChange);
+                Warning.Singleton.Set((float)hits / maxWarningHits);
+                _rb.AddForce(
+                    (direction * force + Vector3.up * 5) * knockBackMultiplier * _gamePlayer.metaData.knockBack,
+                    ForceMode.VelocityChange);
                 _gamePlayer.GiveScore(-5, $"GOT HIT");
                 _gamePlayer.Stun();
             }
             else{
-                _rb.AddForce(direction * force + Vector3.up * 10, ForceMode.VelocityChange);
+                _rb.AddForce((direction * force + Vector3.up * 10) * _gamePlayer.metaData.knockBack,
+                    ForceMode.VelocityChange);
             }
         }
 
@@ -87,7 +90,7 @@ namespace Code.Players.GameModes{
             if (!isLocalPlayer) return;
             knockBackMultiplier = newValue;
             hits = 0;
-            Warning.Singleton.Set((float)hits/maxWarningHits);
+            Warning.Singleton.Set((float)hits / maxWarningHits);
         }
     }
 }

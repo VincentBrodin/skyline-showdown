@@ -58,7 +58,7 @@ namespace Code.Items{
         private void FixedUpdate(){
             if (!isServer) return;
             if (!rotating) return;
-            rb.AddForce(Vector3.down * 15, ForceMode.Acceleration);
+            rb.AddForce((Physics.gravity + Vector3.down * 15) * Manager().localPlayer.metaData.gravity, ForceMode.Acceleration);
         }
 
         private void Update(){
