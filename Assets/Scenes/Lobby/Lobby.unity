@@ -3090,7 +3090,7 @@ MonoBehaviour:
   options:
   - optionName: Land Mine - 250
     id: Land Mine
-    icon: {fileID: 21300000, guid: de2b672d2b1bfa240bbe468ac00f5f8d, type: 3}
+    icon: {fileID: 21300000, guid: 39219afbe019cbe44bfaa09c903101b3, type: 3}
     price: 250
     image: {fileID: 0}
     transform: {fileID: 0}
@@ -3108,7 +3108,7 @@ MonoBehaviour:
     transform: {fileID: 0}
   - optionName: Shield - 250
     id: Shield
-    icon: {fileID: 21300000, guid: efa95dcebc278d64eb9a3ceca07d7fa3, type: 3}
+    icon: {fileID: 21300000, guid: fd31135faa6d5ad41b7ef1be291cee2b, type: 3}
     price: 250
     image: {fileID: 0}
     transform: {fileID: 0}
@@ -27105,7 +27105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 1
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0
   target: {fileID: 524428171753993453}
@@ -27139,7 +27139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff3ba0becae47b8b9381191598957c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 1
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0
   target: {fileID: 524428171753993453}

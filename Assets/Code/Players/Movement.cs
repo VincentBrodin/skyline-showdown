@@ -249,6 +249,9 @@ namespace Code.Players{
 
             animator.SetBool("Crouch", crouching);
             handsAnimator.SetBool("Crouch", crouching);
+
+            animator.speed = _gamePlayer.metaData.speed;
+            handsAnimator.speed = _gamePlayer.metaData.speed;
         }
 
         private float SlopeSpeed(){

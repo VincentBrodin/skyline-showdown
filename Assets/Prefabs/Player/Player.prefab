@@ -1000,6 +1000,7 @@ MonoBehaviour:
   syncInterval: 0
   connectionId: 0
   playerId: 0
+  isHost: 0
   playerName: 
   frozen: 0
   stun: 0
@@ -1017,6 +1018,9 @@ MonoBehaviour:
     gameTime: 0
     speed: 0
     gravity: 0
+    score: 0
+    knockBack: 0
+  metaDataString: 
 --- !u!114 &8828643306918456554
 MonoBehaviour:
   m_ObjectHideFlags: 0

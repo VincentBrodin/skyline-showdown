@@ -75,6 +75,8 @@ namespace Code.Players{
                 nameTag.gameObject.SetActive(false);
 
                 isHost = isServer;
+                if (PlayerPrefs.HasKey("CustomGame"))
+                    metaDataString = PlayerPrefs.GetString("CustomGame");
             }
 
             Manager().AddPlayer(this);
@@ -335,6 +337,7 @@ namespace Code.Players{
         private void ClientSetMetaData(string jsonMetaData){
             GameSettingsManager.Singleton.SetCustomMeta(jsonMetaData);
             if (isHost){
+                PlayerPrefs.SetString("CustomGame", jsonMetaData);
                 metaDataString = jsonMetaData;
             }
         }
